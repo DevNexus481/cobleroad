@@ -104,6 +104,30 @@ export function ProductDetailInteractive({
   // 4. Variant Images Calculation
   const galleryImages: GalleryImage[] = useMemo(() => {
     if (!product?.images || product.images.length === 0) {
+      if (demoData?.productId === 'meridian-duffle' || demoData?.name?.includes('Meridian')) {
+        return [
+          {
+            id: 'cbr-tan-main',
+            url: '/images/products/duffle-travel.jpg',
+            alt: 'The Cobleroad Duffle — Tan Heritage',
+          },
+          {
+            id: 'cbr-black-carry',
+            url: '/images/products/variants/meridian-duffle-black-front.jpg',
+            alt: 'The Cobleroad Duffle — Black Carry',
+          },
+          {
+            id: 'cbr-shoulder-strap',
+            url: '/images/products/meridian-duffle-angle.jpg',
+            alt: 'The Cobleroad Duffle — Shoulder Carry Silhouette',
+          },
+          {
+            id: 'cbr-interior-craft',
+            url: '/images/products/meridian-duffle-detail.jpg',
+            alt: 'The Cobleroad Duffle — Interior Craftsmanship & Access',
+          },
+        ]
+      }
       return [
         {
           id: 'demo-img-1',

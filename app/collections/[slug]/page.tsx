@@ -3,49 +3,25 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getCollectionWithProducts } from '@/lib/products/queries'
+import { REAL_PRODUCTS, getProductsByCollection } from '@/lib/products/catalogue'
 import { ArrowLeft } from 'lucide-react'
 import { ProductGridCard } from '@/components/storefront/ProductGridCard'
 
-const DEMO_COLLECTIONS: Record<string, { name: string; desc: string; image: string; products: any[] }> = {
+const COLLECTION_META: Record<string, { name: string; desc: string; image: string }> = {
   'work-bags': {
     name: 'Work Bags',
     desc: 'Structured leather bags designed for the modern professional.',
-    image: '/images/products/laptop-bag.jpg',
-    products: [
-      { slug: 'advocate-briefcase', name: 'The Advocate Briefcase', price: 1299900, image: '/images/hero/hero-briefcase.jpg', personalisable: true },
-      { slug: 'meridian-laptop-bag', name: 'The Meridian Laptop Bag', price: 1099900, image: '/images/products/laptop-bag.jpg', personalisable: false },
-      { slug: 'telegraph-messenger', name: 'The Telegraph Messenger', price: 799900, image: '/images/products/messenger-cognac.jpg', personalisable: true },
-    ],
+    image: '/images/products/real/unfold-laptop-bag/unfold-laptop-bag-01.png',
   },
   'everyday-bags': {
     name: 'Everyday Bags',
     desc: 'Versatile leather companions for daily life.',
-    image: '/images/products/tote-espresso.jpg',
-    products: [
-      { slug: 'marlow-tote', name: 'The Marlow Tote', price: 899900, image: '/images/products/tote-espresso.jpg', personalisable: false },
-      { slug: 'crossroads-crossbody', name: 'The Crossroads Crossbody', price: 699900, image: '/images/products/messenger-cognac.jpg', personalisable: true },
-      { slug: 'fielder-backpack', name: 'The Fielder Backpack', price: 1199900, image: '/images/products/backpack-tan.jpg', personalisable: false },
-    ],
+    image: '/images/products/real/metropolitan-backpack/metropolitan-backpack-01.png',
   },
   'travel-essentials': {
     name: 'Travel Essentials',
     desc: 'Travel with intention. Leather built for the journey.',
-    image: '/images/products/duffle-travel.jpg',
-    products: [
-      { slug: 'meridian-duffle', name: 'The Meridian Duffle', price: 1599900, image: '/images/products/duffle-travel.jpg', personalisable: false },
-      { slug: 'atlas-weekender', name: 'The Atlas Weekender', price: 1399900, image: '/images/products/weekender.jpg', personalisable: false },
-      { slug: 'transit-passport-wallet', name: 'The Transit Passport Wallet', price: 299900, image: '/images/products/passport-holder.jpg', personalisable: true },
-    ],
-  },
-  'small-leather-goods': {
-    name: 'Small Leather Goods',
-    desc: 'Refined accessories for the essentials.',
-    image: '/images/products/cardholder.jpg',
-    products: [
-      { slug: 'folding-wallet-slim', name: 'The Folding Wallet', price: 249900, image: '/images/products/wallet-slim.jpg', personalisable: true },
-      { slug: 'card-sleeve', name: 'The Card Sleeve', price: 149900, image: '/images/products/cardholder.jpg', personalisable: true },
-      { slug: 'transit-passport-wallet', name: 'The Transit Passport Wallet', price: 299900, image: '/images/products/passport-holder.jpg', personalisable: true },
-    ],
+    image: '/images/products/real/weekender-duffle/weekender-duffle-11.png',
   },
 }
 
@@ -55,24 +31,45 @@ interface CollectionPageProps {
 
 export async function generateMetadata({ params }: CollectionPageProps): Promise<Metadata> {
   const { slug } = await params
-  const demo = DEMO_COLLECTIONS[slug]
-  const name = demo?.name ?? slug.replace(/-/g, ' ')
+  const meta = COLLECTION_META[slug]
+  const name = meta?.name ?? slug.replace(/-/g, ' ')
   return {
     title: `${name} — Cobleroad`,
-    description: demo?.desc ?? `Shop ${name} at Cobleroad.`,
+    description: meta?.desc ?? `Shop ${name} at Cobleroad.`,
   }
 }
 
 export default async function CollectionPage({ params }: CollectionPageProps) {
   const { slug } = await params
   const { collection, products } = await getCollectionWithProducts(slug)
-  const demo = DEMO_COLLECTIONS[slug]
+  const meta = COLLECTION_META[slug]
 
-  if (!collection && !demo) notFound()
+  const realCatalogueProducts = getProductsByCollection(slug)
+  if (!collection && !meta && realCatalogueProducts.length === 0) notFound()
 
-  const displayName = collection?.name ?? demo?.name ?? slug
-  const displayDesc = collection?.description ?? demo?.desc ?? ''
-  const displayProducts = products.length > 0 ? products : (demo?.products ?? [])
+  const displayName = collection?.name ?? meta?.name ?? slug
+  const displayDesc = collection?.description ?? meta?.desc ?? ''
+  
+  const demoFallbackProducts = realCatalogueProducts.map((p) => ({
+    id: p.slug,
+    slug: p.slug,
+    name: p.name,
+    short_description: p.shortDescription,
+    is_featured: p.featured,
+    is_demo: true,
+    personalisable: p.personalisable,
+    primary_image: { id: p.slug, url: p.primaryImage, alt: p.name },
+    variants: p.variants.map((v, i) => ({
+      id: `${p.slug}-${i}`,
+      colour: v.colour,
+      colour_hex: v.colourHex,
+      image_url: v.imageUrl,
+      stock_quantity: 10,
+      prices: [{ id: `p-${p.slug}-${i}`, currency: 'INR', amount_minor: p.priceINR || 999900 }],
+    })),
+  }))
+
+  const displayProducts = products.length > 0 ? products : demoFallbackProducts
   const isDemo = products.length === 0
 
   return (
@@ -120,7 +117,7 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
                 isFeatured={Boolean(p.is_featured)}
                 isDemo={Boolean(p.is_demo)}
                 personalisable={Boolean(p.personalisation?.enabled || p.personalisable)}
-                primaryImage={p.primary_image || { id: p.slug, url: p.image || '/images/hero/hero-briefcase.jpg', alt: p.name }}
+                primaryImage={p.primary_image || { id: p.slug, url: p.image || '/images/products/real/unfold-laptop-bag/unfold-laptop-bag-01.png', alt: p.name }}
                 variants={
                   p.variants && p.variants.length > 0
                     ? p.variants

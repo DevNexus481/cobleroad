@@ -5,6 +5,7 @@ import { ArrowRight, Truck, RefreshCw, Shield, Leaf } from 'lucide-react'
 import { ProductGridCard } from '@/components/storefront/ProductGridCard'
 import PerspectiveTunnelHero from '@/components/ui/perspective-tunnel-hero'
 import { getPublishedProducts } from '@/lib/products/queries'
+import { FEATURED_PRODUCTS } from '@/lib/products/catalogue'
 
 export const metadata: Metadata = {
   title: 'Cobleroad — Premium Genuine Leather Bags & Accessories',
@@ -16,32 +17,32 @@ const CATEGORY_TILES = [
   {
     slug: 'work-bags',
     name: 'Work Bags',
-    image: '/images/products/laptop-bag.jpg',
+    image: '/images/products/real/unfold-laptop-bag/unfold-laptop-bag-01.png',
   },
   {
     slug: 'everyday-bags',
     name: 'Everyday Bags',
-    image: '/images/products/tote-espresso.jpg',
+    image: '/images/products/real/inappreciable-tote/inappreciable-tote-01.png',
   },
   {
     slug: 'travel-essentials',
     name: 'Travel Essentials',
-    image: '/images/products/duffle-travel.jpg',
+    image: '/images/products/real/weekender-duffle/weekender-duffle-11.png',
   },
   {
-    slug: 'small-leather-goods',
-    name: 'Small Leather Goods',
-    image: '/images/products/wallet-slim.jpg',
-  },
-  {
-    slug: 'backpacks',
+    slug: 'everyday-bags',
     name: 'Backpacks',
-    image: '/images/products/backpack-tan.jpg',
+    image: '/images/products/real/metropolitan-backpack/metropolitan-backpack-01.png',
   },
   {
-    slug: 'accessories',
-    name: 'Accessories',
-    image: '/images/products/cardholder.jpg',
+    slug: 'everyday-bags',
+    name: 'Gym Bags',
+    image: '/images/products/real/barrel-gym-bag/barrel-gym-bag-08.png',
+  },
+  {
+    slug: 'work-bags',
+    name: 'Laptop Bags',
+    image: '/images/products/real/atlanta-laptop-sleeve/atlanta-laptop-sleeve-01.png',
   },
 ]
 
@@ -83,88 +84,27 @@ export default async function HomePage() {
         isNew: p.is_featured,
         isDemo: Boolean(p.is_demo),
         personalisable: Boolean(p.personalisation?.enabled),
-        primaryImage: p.primary_image || { id: p.id, url: '/images/hero/hero-briefcase.jpg', alt: p.name },
+        primaryImage: p.primary_image || { id: p.id, url: '/images/products/real/unfold-laptop-bag/unfold-laptop-bag-01.png', alt: p.name },
         variants: p.variants as any,
       }))
-    : [
-        {
-          id: 'advocate-briefcase',
-          slug: 'advocate-briefcase',
-          name: 'The Advocate Briefcase',
-          desc: 'Dual-buckle closure, removable strap.',
-          isNew: true,
-          isDemo: true,
-          personalisable: true,
-          primaryImage: { id: 'adv-img', url: '/images/hero/hero-briefcase.jpg', alt: 'The Advocate Briefcase' },
-          variants: [
-            { id: 'adv-cog', colour: 'Cognac', colour_hex: '#9A633F', image_url: '/images/hero/hero-briefcase.jpg', stock_quantity: 12, prices: [{ id: 'p1', currency: 'INR' as const, amount_minor: 1299900 }] },
-            { id: 'adv-esp', colour: 'Espresso', colour_hex: '#2B211D', image_url: '/images/products/variants/advocate-briefcase-espresso-front.jpg', stock_quantity: 8, prices: [{ id: 'p2', currency: 'INR' as const, amount_minor: 1299900 }] },
-            { id: 'adv-blk', colour: 'Black', colour_hex: '#1F1B18', image_url: '/images/products/variants/advocate-briefcase-black-front.jpg', stock_quantity: 10, prices: [{ id: 'p3', currency: 'INR' as const, amount_minor: 1299900 }] },
-            { id: 'adv-tan', colour: 'Tan', colour_hex: '#B5784E', image_url: '/images/products/variants/advocate-briefcase-tan-front.jpg', stock_quantity: 6, prices: [{ id: 'p4', currency: 'INR' as const, amount_minor: 1299900 }] },
-          ],
-        },
-        {
-          id: 'fielder-backpack',
-          slug: 'fielder-backpack',
-          name: 'The Fielder Backpack',
-          desc: 'Structured leather, padded laptop sleeve.',
-          isNew: true,
-          isDemo: true,
-          personalisable: true,
-          primaryImage: { id: 'fie-img', url: '/images/products/backpack-tan.jpg', alt: 'The Fielder Backpack' },
-          variants: [
-            { id: 'fie-tan', colour: 'Tan', colour_hex: '#B5784E', image_url: '/images/products/backpack-tan.jpg', stock_quantity: 15, prices: [{ id: 'p1', currency: 'INR' as const, amount_minor: 1199900 }] },
-            { id: 'fie-esp', colour: 'Espresso', colour_hex: '#2B211D', image_url: '/images/products/variants/fielder-backpack-espresso-front.jpg', stock_quantity: 10, prices: [{ id: 'p2', currency: 'INR' as const, amount_minor: 1199900 }] },
-            { id: 'fie-cog', colour: 'Cognac', colour_hex: '#9A633F', image_url: '/images/products/variants/fielder-backpack-cognac-front.jpg', stock_quantity: 8, prices: [{ id: 'p3', currency: 'INR' as const, amount_minor: 1199900 }] },
-            { id: 'fie-blk', colour: 'Black', colour_hex: '#1F1B18', image_url: '/images/products/variants/fielder-backpack-black-front.jpg', stock_quantity: 12, prices: [{ id: 'p4', currency: 'INR' as const, amount_minor: 1199900 }] },
-          ],
-        },
-        {
-          id: 'marlow-tote',
-          slug: 'marlow-tote',
-          name: 'The Marlow Tote',
-          desc: 'Open-top tote with interior zip pocket.',
-          isNew: false,
-          isDemo: true,
-          personalisable: true,
-          primaryImage: { id: 'mar-img', url: '/images/products/tote-espresso.jpg', alt: 'The Marlow Tote' },
-          variants: [
-            { id: 'mar-esp', colour: 'Espresso', colour_hex: '#2B211D', image_url: '/images/products/tote-espresso.jpg', stock_quantity: 18, prices: [{ id: 'p1', currency: 'INR' as const, amount_minor: 899900 }] },
-            { id: 'mar-cog', colour: 'Cognac', colour_hex: '#9A633F', image_url: '/images/products/variants/marlow-tote-cognac-front.jpg', stock_quantity: 14, prices: [{ id: 'p2', currency: 'INR' as const, amount_minor: 899900 }] },
-            { id: 'mar-blk', colour: 'Black', colour_hex: '#1F1B18', image_url: '/images/products/variants/marlow-tote-black-front.jpg', stock_quantity: 9, prices: [{ id: 'p3', currency: 'INR' as const, amount_minor: 899900 }] },
-            { id: 'mar-tan', colour: 'Tan', colour_hex: '#B5784E', image_url: '/images/products/variants/marlow-tote-tan-front.jpg', stock_quantity: 11, prices: [{ id: 'p4', currency: 'INR' as const, amount_minor: 899900 }] },
-          ],
-        },
-        {
-          id: 'meridian-duffle',
-          slug: 'meridian-duffle',
-          name: 'The Meridian Duffle',
-          desc: 'Travel duffle with reinforced base.',
-          isNew: true,
-          isDemo: true,
-          personalisable: true,
-          primaryImage: { id: 'mer-img', url: '/images/products/duffle-travel.jpg', alt: 'The Meridian Duffle' },
-          variants: [
-            { id: 'mer-cog', colour: 'Cognac', colour_hex: '#9A633F', image_url: '/images/products/duffle-travel.jpg', stock_quantity: 7, prices: [{ id: 'p1', currency: 'INR' as const, amount_minor: 1599900 }] },
-            { id: 'mer-esp', colour: 'Espresso', colour_hex: '#2B211D', image_url: '/images/products/variants/meridian-duffle-espresso-front.jpg', stock_quantity: 5, prices: [{ id: 'p2', currency: 'INR' as const, amount_minor: 1599900 }] },
-            { id: 'mer-blk', colour: 'Black', colour_hex: '#1F1B18', image_url: '/images/products/variants/meridian-duffle-black-front.jpg', stock_quantity: 8, prices: [{ id: 'p3', currency: 'INR' as const, amount_minor: 1599900 }] },
-            { id: 'mer-olv', colour: 'Olive', colour_hex: '#6D7155', image_url: '/images/products/variants/meridian-duffle-olive-front.jpg', stock_quantity: 6, prices: [{ id: 'p4', currency: 'INR' as const, amount_minor: 1599900 }] },
-          ],
-        },
-        {
-          id: 'marlow-tote-messenger',
-          slug: 'messenger-cognac',
-          name: 'The Ridge Messenger',
-          desc: 'Slim shoulder messenger with quick-access flap.',
-          isNew: false,
-          isDemo: true,
-          personalisable: true,
-          primaryImage: { id: 'msg-img', url: '/images/products/messenger-cognac.jpg', alt: 'The Ridge Messenger' },
-          variants: [
-            { id: 'msg-cog', colour: 'Cognac', colour_hex: '#9A633F', image_url: '/images/products/messenger-cognac.jpg', stock_quantity: 10, prices: [{ id: 'p1', currency: 'INR' as const, amount_minor: 749900 }] },
-          ],
-        },
-      ]
+    : FEATURED_PRODUCTS.map((p, i) => ({
+        id: p.slug,
+        slug: p.slug,
+        name: p.name,
+        desc: p.shortDescription,
+        isNew: p.featured,
+        isDemo: false,
+        personalisable: p.personalisable,
+        primaryImage: { id: `${p.slug}-img`, url: p.primaryImage, alt: p.name },
+        variants: p.variants.map((v, vi) => ({
+          id: `${p.slug}-${v.sku}`,
+          colour: v.colour,
+          colour_hex: v.colourHex,
+          image_url: v.imageUrl,
+          stock_quantity: 10,
+          prices: [{ id: `price-${i}-${vi}`, currency: 'INR' as const, amount_minor: p.priceINR }],
+        })),
+      }))
 
   return (
     <>
@@ -172,13 +112,13 @@ export default async function HomePage() {
       <section className="hero" aria-label="Hero">
         <div className="hero__bg" aria-hidden="true">
           <Image
-            src="/images/hero/hero-briefcase.jpg"
-            alt=""
+            src="/images/products/real/weekender-duffle/weekender-duffle-15.png"
+            alt="Cobleroad genuine handcrafted leather bag"
             fill
             priority
             quality={92}
             sizes="100vw"
-            style={{ objectFit: 'cover', objectPosition: 'center 25%' }}
+            style={{ objectFit: 'cover', objectPosition: 'center 35%' }}
           />
         </div>
         <div className="hero__overlay" aria-hidden="true" />
@@ -260,7 +200,7 @@ export default async function HomePage() {
         <div className="category-row__scroll" role="list">
           {CATEGORY_TILES.map((cat) => (
             <Link
-              key={cat.slug}
+              key={`${cat.slug}-${cat.name}`}
               href={`/collections/${cat.slug}`}
               className="category-tile"
               role="listitem"
@@ -322,9 +262,9 @@ export default async function HomePage() {
           {/* 3 detail thumbnails */}
           <div className="craft-dark__details">
             {[
-              { img: '/images/products/cardholder.jpg', label: 'Full-Grain\nLeather' },
-              { img: '/images/products/wallet-slim.jpg', label: 'Solid Brass\nHardware' },
-              { img: '/images/products/passport-holder.jpg', label: 'Hand-Finished\nDetails' },
+              { img: '/images/products/real/unfold-laptop-bag/unfold-laptop-bag-04.png', label: 'Full-Grain\nLeather' },
+              { img: '/images/products/real/optimus-transformer-bag/optimus-transformer-bag-01.png', label: 'Solid Brass\nHardware' },
+              { img: '/images/products/real/shoe-compartment-duffle/shoe-compartment-duffle-06.png', label: 'Hand-Finished\nDetails' },
             ].map((d) => (
               <div key={d.label} className="craft-detail-thumb">
                 <Image
@@ -347,7 +287,7 @@ export default async function HomePage() {
         {/* Tile 1 */}
         <div className="bento-tile">
           <div className="bento-tile__bg" aria-hidden="true">
-            <Image src="/images/lifestyle/lifestyle-desk.jpg" alt="" fill sizes="33vw" style={{ objectFit: 'cover' }} />
+            <Image src="/images/products/real/weekender-duffle/weekender-duffle-17.png" alt="" fill sizes="33vw" style={{ objectFit: 'cover' }} />
           </div>
           <div className="bento-tile__content">
             <span className="bento-tile__eyebrow">The Craft</span>
@@ -364,7 +304,7 @@ export default async function HomePage() {
         {/* Tile 2 */}
         <div className="bento-tile">
           <div className="bento-tile__bg" aria-hidden="true">
-            <Image src="/images/products/duffle-travel.jpg" alt="" fill sizes="33vw" style={{ objectFit: 'cover' }} />
+            <Image src="/images/products/real/barrel-gym-bag/barrel-gym-bag-09.png" alt="" fill sizes="33vw" style={{ objectFit: 'cover' }} />
           </div>
           <div className="bento-tile__content">
             <span className="bento-tile__eyebrow">A Modern Classic</span>
@@ -381,7 +321,7 @@ export default async function HomePage() {
         {/* Tile 3 */}
         <div className="bento-tile">
           <div className="bento-tile__bg" aria-hidden="true">
-            <Image src="/images/products/backpack-tan.jpg" alt="" fill sizes="33vw" style={{ objectFit: 'cover' }} />
+            <Image src="/images/products/real/inappreciable-tote/inappreciable-tote-07.png" alt="" fill sizes="33vw" style={{ objectFit: 'cover' }} />
           </div>
           <div className="bento-tile__content">
             <span className="bento-tile__eyebrow">Complimentary</span>

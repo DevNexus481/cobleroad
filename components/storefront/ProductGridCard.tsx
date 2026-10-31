@@ -164,11 +164,13 @@ export function ProductGridCard({
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             style={{
-              objectFit: 'cover',
+              objectFit: 'contain',
+              objectPosition: 'center',
+              padding: '0.5rem',
               opacity: hoverImgUrl && isHovered ? 0 : 1,
               transition:
                 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
-              transform: isHovered ? 'scale(1.04)' : 'scale(1)',
+              transform: isHovered ? 'scale(1.03)' : 'scale(1)',
             }}
           />
 
@@ -180,11 +182,13 @@ export function ProductGridCard({
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               style={{
-                objectFit: 'cover',
+                objectFit: 'contain',
+                objectPosition: 'center',
+                padding: '0.5rem',
                 opacity: isHovered ? 1 : 0,
                 transition:
                   'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
-                transform: isHovered ? 'scale(1.04)' : 'scale(1)',
+                transform: isHovered ? 'scale(1.03)' : 'scale(1)',
               }}
             />
           )}

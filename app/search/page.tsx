@@ -3,6 +3,7 @@ import { Suspense } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getPublishedProducts } from '@/lib/products/queries'
+import { REAL_PRODUCTS } from '@/lib/products/catalogue'
 import { formatAmount } from '@/lib/currency'
 import { Search as SearchIcon, ArrowRight } from 'lucide-react'
 
@@ -16,14 +17,14 @@ interface SearchPageProps {
 }
 
 const POPULAR_SEARCHES = [
-  'Briefcase',
   'Laptop Bag',
-  'Tote',
+  'Laptop Sleeve',
   'Backpack',
-  'Messenger',
   'Duffle',
-  'Wallet',
-  'Passport',
+  'Gym Bag',
+  'Rucksack',
+  'Tote',
+  'Fanny Bag',
 ]
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
@@ -35,6 +36,65 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     currency: 'INR',
     limit: 24,
   })
+
+  let displayProducts = products
+  if (displayProducts.length === 0) {
+    const qLower = query.toLowerCase()
+    const matches = REAL_PRODUCTS.filter((p) =>
+      !query ||
+      p.name.toLowerCase().includes(qLower) ||
+      p.shortDescription.toLowerCase().includes(qLower) ||
+      p.description.toLowerCase().includes(qLower) ||
+      p.material.toLowerCase().includes(qLower) ||
+      p.collections.some((c) => c.toLowerCase().includes(qLower))
+    )
+
+    displayProducts = matches.map((p) => ({
+      id: p.slug,
+      slug: p.slug,
+      name: p.name,
+      short_description: p.shortDescription,
+      status: 'published' as const,
+      is_featured: p.featured,
+      is_demo: true,
+      personalisation: p.personalisable
+        ? {
+            enabled: true,
+            label: 'Complimentary Monogram',
+            max_chars: 3,
+            allowed_pattern: '^[A-Z]{1,3}$',
+          }
+        : null,
+      primary_image: {
+        id: `img-${p.slug}`,
+        product_id: p.slug,
+        variant_id: null,
+        url: p.primaryImage,
+        alt: p.name,
+        sort_order: 1,
+        is_primary: true,
+        status: 'approved' as const,
+        created_at: new Date().toISOString(),
+      },
+      variants: p.variants.map((v, i) => ({
+        id: `${p.slug}-${i}`,
+        colour: v.colour,
+        colour_hex: v.colourHex,
+        image_url: v.imageUrl,
+        stock_quantity: 10,
+        prices: [
+          {
+            id: `pr-${p.slug}-${i}`,
+            product_id: p.slug,
+            variant_id: `${p.slug}-${i}`,
+            currency: 'INR' as const,
+            amount_minor: p.priceINR || 999900,
+            created_at: new Date().toISOString(),
+          },
+        ],
+      })),
+    }))
+  }
 
   return (
     <div style={{ backgroundColor: 'var(--colour-paper)', minHeight: '80vh' }}>
@@ -113,7 +173,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         {query ? (
           <div style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
             <p style={{ fontSize: '0.9375rem', color: 'var(--colour-charcoal)' }}>
-              Showing {products.length} {products.length === 1 ? 'result' : 'results'} for &ldquo;<strong>{query}</strong>&rdquo;
+              Showing {displayProducts.length} {displayProducts.length === 1 ? 'result' : 'results'} for &ldquo;<strong>{query}</strong>&rdquo;
             </p>
             <Link href="/shop" style={{ fontSize: '0.8125rem', color: 'var(--colour-cognac)', textDecoration: 'underline' }}>
               View full catalogue
@@ -125,9 +185,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           </div>
         )}
 
-        {products.length > 0 ? (
+        {displayProducts.length > 0 ? (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '2.5rem' }}>
-            {products.map((product) => {
+            {displayProducts.map((product) => {
               const firstVariant = product.variants[0]
               const price = firstVariant?.prices[0]
               const image = product.primary_image

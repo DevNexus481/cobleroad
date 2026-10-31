@@ -5,45 +5,29 @@ import Link from 'next/link'
 import { getProductBySlug } from '@/lib/products/queries'
 import { formatAmount } from '@/lib/currency'
 import { ProductDetailInteractive } from '@/components/storefront/ProductDetailInteractive'
+import { PRODUCT_BY_SLUG } from '@/lib/products/catalogue'
 
-// Demo product data for when Supabase is not configured
+// Fallback product data (used when Supabase is not configured or product not in DB yet)
+// Includes all 14 real products from the BAG AND LUGGAGE catalogue
 const DEMO_PRODUCTS: Record<string, {
   name: string; desc: string; shortDesc: string; price: number; image: string;
   personalisable: boolean; colour: string; stock: number; material: string | null;
-}> = {
-  'advocate-briefcase': {
-    name: 'The Advocate Briefcase',
-    desc: 'The Advocate is built for those who carry more than a laptop. With its dual-buckle top flap, reinforced base, and removable shoulder strap, it transitions from the boardroom to the evening with quiet authority. The interior features a structured document compartment and a padded laptop sleeve.',
-    shortDesc: 'A structured leather briefcase with dual-buckle closure.',
-    price: 1299900, image: '/images/hero/hero-briefcase.jpg',
-    personalisable: true, colour: 'Cognac', stock: 15,
-    material: 'Genuine leather exterior',
-  },
-  'fielder-backpack': {
-    name: 'The Fielder Backpack',
-    desc: 'The Fielder carries everything and announces nothing. Its padded back panel and adjustable straps distribute weight evenly without sacrificing style. A padded laptop sleeve fits up to 15 inches. The top grab handle is solid rolled leather.',
-    shortDesc: 'A structured leather backpack with padded laptop sleeve.',
-    price: 1199900, image: '/images/products/backpack-tan.jpg',
-    personalisable: true, colour: 'Tan', stock: 20,
-    material: 'Genuine leather exterior',
-  },
-  'marlow-tote': {
-    name: 'The Marlow Tote',
-    desc: 'The Marlow is a generous, unstructured tote with enough room for a day\'s essentials plus a change of clothes. The double handles are substantial enough to carry comfortably on the shoulder. An interior zip pocket keeps smaller items secured.',
-    shortDesc: 'An open-top leather tote with internal zip pocket.',
-    price: 899900, image: '/images/products/tote-espresso.jpg',
-    personalisable: true, colour: 'Espresso', stock: 30,
-    material: 'Genuine leather exterior',
-  },
-  'meridian-duffle': {
-    name: 'The Meridian Duffle',
-    desc: 'For those who travel with conviction. The Meridian Duffle is built wide and deep, with a double zipper and solid base feet to protect the leather during transit. A detachable shoulder strap and rolled top handles offer two carry options.',
-    shortDesc: 'A large leather travel duffle with reinforced base.',
-    price: 1599900, image: '/images/products/duffle-travel.jpg',
-    personalisable: true, colour: 'Cognac', stock: 12,
-    material: 'Genuine leather exterior',
-  },
-}
+}> = Object.fromEntries(
+  Object.values(PRODUCT_BY_SLUG).map((p) => [
+    p.slug,
+    {
+      name: p.name,
+      desc: p.description,
+      shortDesc: p.shortDescription,
+      price: p.priceINR,
+      image: p.primaryImage,
+      personalisable: p.personalisable,
+      colour: p.variants[0]?.colour ?? 'Cognac',
+      stock: 10,
+      material: p.material,
+    },
+  ])
+)
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>
@@ -101,7 +85,35 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
       <div className="container-site" style={{ paddingTop: '3rem', paddingBottom: '5rem' }}>
         <ProductDetailInteractive
-          product={product}
+          product={
+            product
+              ? {
+                  ...product,
+                  // Inject real gallery images from catalogue when Supabase has no images yet
+                  ...(!product.images || product.images.length === 0
+                    ? (() => {
+                        const catalogueProduct = PRODUCT_BY_SLUG[slug]
+                        if (catalogueProduct) {
+                          return {
+                            images: catalogueProduct.gallery.map((url, i) => ({
+                              id: `real-${slug}-${i}`,
+                              product_id: product.id,
+                              variant_id: null,
+                              url,
+                              alt: `${catalogueProduct.name} — View ${i + 1}`,
+                              sort_order: i + 1,
+                              is_primary: i === 0,
+                              status: 'approved' as const,
+                              created_at: new Date().toISOString(),
+                            })),
+                          }
+                        }
+                        return {}
+                      })()
+                    : {}),
+                }
+              : null
+          }
           demoData={
             demoData
               ? {

@@ -57,9 +57,10 @@ export function ProductGallery({
           position: 'relative',
           aspectRatio: '4/5',
           overflow: 'hidden',
-          backgroundColor: 'var(--colour-parchment)',
+          backgroundColor: '#FFFFFF',
           marginBottom: '1rem',
           borderRadius: '2px',
+          border: '1px solid var(--colour-border-light)',
           boxShadow: '0 4px 20px rgba(43, 33, 29, 0.04)',
         }}
         onMouseEnter={() => setIsZoomed(true)}
@@ -83,8 +84,10 @@ export function ProductGallery({
               priority={i === 0}
               sizes="(max-width: 768px) 100vw, 50vw"
               style={{
-                objectFit: 'cover',
-                transform: isZoomed && i === activeIndex ? 'scale(1.05)' : 'scale(1)',
+                objectFit: 'contain',
+                objectPosition: 'center',
+                padding: '1rem',
+                transform: isZoomed && i === activeIndex ? 'scale(1.04)' : 'scale(1)',
                 transition: 'transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
               }}
               quality={90}
@@ -172,7 +175,7 @@ export function ProductGallery({
                   width: '4.75rem',
                   aspectRatio: '1',
                   overflow: 'hidden',
-                  backgroundColor: 'var(--colour-parchment)',
+                  backgroundColor: '#FFFFFF',
                   border: isActive
                     ? '2px solid var(--colour-espresso)'
                     : '1px solid var(--colour-border)',
@@ -189,7 +192,7 @@ export function ProductGallery({
                   alt={img.alt ?? `${productName} thumbnail ${i + 1}`}
                   fill
                   sizes="80px"
-                  style={{ objectFit: 'cover' }}
+                  style={{ objectFit: 'contain', padding: '0.25rem' }}
                 />
               </button>
             )

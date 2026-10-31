@@ -4,6 +4,8 @@
 // when live Supabase records are not yet published.
 // =============================================================================
 
+import { REAL_PRODUCTS } from './catalogue'
+
 export interface FallbackVariant {
   productId: string
   productName: string
@@ -81,10 +83,19 @@ export function getFallbackVariant(variantId: string): FallbackVariant | null {
     return FALLBACK_VARIANTS[variantId]
   }
 
-  // Generalized prefix match for shop dynamic IDs like `slug-0`
-  for (const [key, val] of Object.entries(FALLBACK_VARIANTS)) {
-    if (variantId.startsWith(key) || key.startsWith(variantId)) {
-      return val
+  // Check REAL_PRODUCTS catalogue
+  for (const prod of REAL_PRODUCTS) {
+    if (variantId === prod.slug || variantId.startsWith(`${prod.slug}-`)) {
+      const variantIndexMatch = variantId.match(new RegExp(`^${prod.slug}-(\\d+)$`))
+      const variantIndex = variantIndexMatch ? parseInt(variantIndexMatch[1], 10) : 0
+      const variant = prod.variants[variantIndex] || prod.variants[0]
+      return {
+        productId: prod.slug,
+        productName: prod.name,
+        colour: variant ? variant.colour : 'Cognac',
+        amountMinor: prod.priceINR || 999900,
+        stock: 10,
+      }
     }
   }
 

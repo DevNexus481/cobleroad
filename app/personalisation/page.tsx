@@ -18,7 +18,7 @@ export default function PersonalisationPage() {
       image: '/images/monogram/monogram-gold-foil.jpg',
       alt: 'Macro photograph of warm Cognac leather with 24K gold foil debossed initials',
       desc: 'Genuine micro-thin 24-karat gold leaf is heat-fused directly into the compressed leather pores. The result is a sharp, luminous monogram that catches the raking light with classical dignity.',
-      recommended: 'The Advocate Briefcase, Marlow Tote, Luggage Clochettes',
+      recommended: '2 Unfold Laptop Bag Heritage, The Inappreciable Tote, Weekender Duffle',
     },
     {
       title: 'Thermal Blind Deboss',
@@ -26,7 +26,7 @@ export default function PersonalisationPage() {
       image: '/images/monogram/monogram-blind-deboss.jpg',
       alt: 'Tactile blind debossed impression on deep espresso leather',
       desc: 'Our master stampers heat solid brass dies to 120°C and apply calibrated hand pressure. The heat gently darkens the hide’s natural oils without any foil, leaving an impression that patinas with the leather for decades.',
-      recommended: 'Meridian Laptop Bag, Slim Bifold Wallets, Minimalist Cardholders',
+      recommended: 'Atlanta Laptop Sleeve, Optimus Transformer Bag, Leather Luggage Tags',
     },
     {
       title: 'Sterling Silver Leaf',
@@ -34,7 +34,7 @@ export default function PersonalisationPage() {
       image: '/images/monogram/monogram-lifestyle-atelier.jpg',
       alt: 'Editorial flatlay of leather luggage tag and passport wallet with silver foil monogramming',
       desc: 'For modern connoisseurs pairing their leather with stainless steel timepieces and silver accessories. A clean metallic foil heat-bonded with razor-sharp micro-bevel edges.',
-      recommended: 'Everyday Folios, Passport Covers, Ridge Messengers',
+      recommended: 'Metropolitan Backpack, Shoe Compartment Duffle, Weekend Bags',
     },
   ]
 

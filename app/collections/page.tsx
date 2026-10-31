@@ -10,10 +10,24 @@ export const metadata: Metadata = {
 }
 
 const FALLBACK_COLLECTIONS = [
-  { slug: 'work-bags', name: 'Work Bags', description: 'Structured leather for the considered professional.', image: '/images/products/laptop-bag.jpg' },
-  { slug: 'everyday-bags', name: 'Everyday Bags', description: 'Versatile companions for daily life.', image: '/images/products/tote-espresso.jpg' },
-  { slug: 'travel-essentials', name: 'Travel Essentials', description: 'Travel with intention. Leather built for the journey.', image: '/images/products/duffle-travel.jpg' },
-  { slug: 'small-leather-goods', name: 'Small Leather Goods', description: 'The finer details, carried with care.', image: '/images/products/cardholder.jpg' },
+  {
+    slug: 'work-bags',
+    name: 'Work Bags',
+    description: 'Structured leather for the considered professional.',
+    image: '/images/products/real/unfold-laptop-bag/unfold-laptop-bag-01.png',
+  },
+  {
+    slug: 'everyday-bags',
+    name: 'Everyday Bags',
+    description: 'Versatile companions for daily life.',
+    image: '/images/products/real/metropolitan-backpack/metropolitan-backpack-01.png',
+  },
+  {
+    slug: 'travel-essentials',
+    name: 'Travel Essentials',
+    description: 'Travel with intention. Leather built for the journey.',
+    image: '/images/products/real/weekender-duffle/weekender-duffle-11.png',
+  },
 ]
 
 export default async function CollectionsPage() {

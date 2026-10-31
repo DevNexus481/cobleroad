@@ -7,6 +7,7 @@ import type { CurrencyCode } from '@/types'
 import { Search, Filter, SlidersHorizontal } from 'lucide-react'
 import { ShopFilterControls } from '@/components/storefront/ShopFilterControls'
 import { ProductGridCard } from '@/components/storefront/ProductGridCard'
+import { REAL_PRODUCTS } from '@/lib/products/catalogue'
 
 export const metadata: Metadata = {
   title: 'Shop All Leather Bags & Accessories',
@@ -30,19 +31,18 @@ const SORT_OPTIONS = [
   { value: 'price_desc', label: 'Price: High to Low' },
 ]
 
-// Demo fallback products with multiple colour variants
-const DEMO_PRODUCTS = [
-  { slug: 'advocate-briefcase', name: 'The Advocate Briefcase', desc: 'Dual-buckle closure, removable strap.', price: 1299900, image: '/images/hero/hero-briefcase.jpg', personalisable: true, colours: ['Cognac', 'Espresso', 'Black'] },
-  { slug: 'fielder-backpack', name: 'The Fielder Backpack', desc: 'Structured leather, padded laptop sleeve.', price: 1199900, image: '/images/products/backpack-tan.jpg', personalisable: false, colours: ['Tan', 'Cognac', 'Olive'] },
-  { slug: 'marlow-tote', name: 'The Marlow Tote', desc: 'Open-top tote with interior zip pocket.', price: 899900, image: '/images/products/tote-espresso.jpg', personalisable: false, colours: ['Espresso', 'Cognac', 'Tan'] },
-  { slug: 'meridian-duffle', name: 'The Meridian Duffle', desc: 'Travel duffle with reinforced base.', price: 1599900, image: '/images/products/duffle-travel.jpg', personalisable: false, colours: ['Cognac', 'Espresso'] },
-  { slug: 'telegraph-messenger', name: 'The Telegraph Messenger', desc: 'Crossbody messenger with magnetic flap.', price: 799900, image: '/images/products/messenger-cognac.jpg', personalisable: true, colours: ['Cognac', 'Espresso', 'Tan'] },
-  { slug: 'folding-wallet-slim', name: 'The Folding Wallet', desc: 'Slim bifold in genuine leather.', price: 249900, image: '/images/products/wallet-slim.jpg', personalisable: true, colours: ['Cognac', 'Espresso', 'Tan', 'Black'] },
-  { slug: 'card-sleeve', name: 'The Card Sleeve', desc: 'Flat cardholder for minimal carry.', price: 149900, image: '/images/products/cardholder.jpg', personalisable: true, colours: ['Cognac', 'Tan', 'Espresso', 'Olive'] },
-  { slug: 'atlas-weekender', name: 'The Atlas Weekender', desc: 'Weekend bag for a thoughtful two-night trip.', price: 1399900, image: '/images/products/weekender.jpg', personalisable: false, colours: ['Cognac', 'Espresso'] },
-  { slug: 'transit-passport-wallet', name: 'The Transit Passport Wallet', desc: 'Travel wallet for passport and cards.', price: 299900, image: '/images/products/passport-holder.jpg', personalisable: true, colours: ['Cognac', 'Espresso', 'Tan'] },
-  { slug: 'meridian-laptop-bag', name: 'The Meridian Laptop Bag', desc: 'Clean-lined leather laptop bag.', price: 1099900, image: '/images/products/laptop-bag.jpg', personalisable: false, colours: ['Cognac', 'Espresso', 'Black'] },
-]
+// Demo fallback — all 14 real products from BAG AND LUGGAGE catalogue
+const DEMO_PRODUCTS = REAL_PRODUCTS.map((p) => ({
+  slug: p.slug,
+  name: p.name,
+  desc: p.shortDescription,
+  price: p.priceINR,
+  image: p.primaryImage,
+  personalisable: p.personalisable,
+  colours: p.variants.map((v) => v.colour),
+  colourHexes: p.variants.map((v) => v.colourHex),
+  variantImages: p.variants.map((v) => v.imageUrl),
+}))
 
 export default async function ShopPage({ searchParams }: ShopPageProps) {
   const params = await searchParams
@@ -64,23 +64,23 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
 
   const collections = await getCollections()
   const isConfigured = error !== 'supabase_not_configured'
-  const displayProducts = isConfigured ? products : DEMO_PRODUCTS.map((p) => ({
+  const displayProducts = isConfigured && products.length > 0 ? products : DEMO_PRODUCTS.map((p, idx) => ({
     id: p.slug,
     slug: p.slug,
     name: p.name,
     short_description: p.desc,
     status: 'published' as const,
-    is_featured: true,
-    is_demo: true,
+    is_featured: idx < 6,
+    is_demo: false,
     personalisation: p.personalisable ? { enabled: true, label: 'Add initials', max_chars: 3, allowed_pattern: null, styles: [] } : null,
     primary_image: { id: p.slug, product_id: p.slug, url: p.image, alt: p.name, sort_order: 0, created_at: '' },
-    variants: p.colours.map((col, idx) => ({
-      id: `${p.slug}-${idx}`,
+    variants: p.colours.map((col, vi) => ({
+      id: `${p.slug}-${vi}`,
       colour: col,
-      colour_hex: null,
-      image_url: p.image,
-      stock_quantity: 12,
-      prices: [{ id: `${p.slug}-${idx}-inr`, product_id: p.slug, variant_id: `${p.slug}-${idx}`, currency: 'INR' as CurrencyCode, amount_minor: p.price, created_at: '' }],
+      colour_hex: p.colourHexes?.[vi] ?? null,
+      image_url: p.variantImages?.[vi] ?? p.image,
+      stock_quantity: 10,
+      prices: [{ id: `${p.slug}-${vi}-inr`, product_id: p.slug, variant_id: `${p.slug}-${vi}`, currency: 'INR' as CurrencyCode, amount_minor: p.price, created_at: '' }],
     })),
   }))
 

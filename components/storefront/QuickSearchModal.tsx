@@ -12,21 +12,21 @@ interface QuickSearchModalProps {
 }
 
 const SEARCH_SUGGESTIONS = [
-  'Briefcase',
   'Laptop Bag',
-  'Tote',
+  'Laptop Sleeve',
   'Backpack',
-  'Messenger',
   'Duffle',
-  'Wallet',
-  'Passport',
+  'Gym Bag',
+  'Rucksack',
+  'Tote',
+  'Bum Bag',
 ]
 
 const FEATURED_ITEMS = [
-  { slug: 'advocate-briefcase', name: 'The Advocate Briefcase', category: 'Work Bags', price: '₹12,999', image: '/images/hero/hero-briefcase.jpg' },
-  { slug: 'meridian-laptop-bag', name: 'The Meridian Laptop Bag', category: 'Work Bags', price: '₹10,999', image: '/images/products/laptop-bag.jpg' },
-  { slug: 'marlow-tote', name: 'The Marlow Tote', category: 'Everyday Bags', price: '₹8,999', image: '/images/products/tote-espresso.jpg' },
-  { slug: 'meridian-duffle', name: 'The Meridian Duffle', category: 'Travel Essentials', price: '₹15,999', image: '/images/products/duffle-travel.jpg' },
+  { slug: 'unfold-laptop-bag', name: '2 Unfold Laptop Bag Heritage', category: 'Work Bags', price: '₹14,999', image: '/images/products/real/unfold-laptop-bag/unfold-laptop-bag-01.png' },
+  { slug: 'metropolitan-backpack', name: 'Metropolitan Backpack', category: 'Everyday Bags', price: '₹11,999', image: '/images/products/real/metropolitan-backpack/metropolitan-backpack-01.png' },
+  { slug: 'weekender-duffle', name: 'Weekender Duffle Bag', category: 'Travel Essentials', price: '₹16,999', image: '/images/products/real/weekender-duffle/weekender-duffle-11.png' },
+  { slug: 'atlanta-laptop-sleeve', name: 'Atlanta Laptop Sleeve', category: 'Work Bags', price: '₹5,999', image: '/images/products/real/atlanta-laptop-sleeve/atlanta-laptop-sleeve-01.png' },
 ]
 
 export function QuickSearchModal({ isOpen, onClose }: QuickSearchModalProps) {
