@@ -121,7 +121,7 @@ export function AdminToolbar() {
         }}
       >
         <Plus size={12} strokeWidth={2.5} />
-        <span>+ Add Piece</span>
+        <span>Add Piece</span>
       </Link>
 
       <Link

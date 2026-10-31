@@ -233,14 +233,7 @@ export function ProductDetailInteractive({
   const materialDesc = product?.material_description ?? demoData?.material ?? null
 
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-        gap: '4rem',
-        alignItems: 'start',
-      }}
-    >
+    <div className="pdp-grid-layout">
       {/* =========================================================================
           LEFT COLUMN: DYNAMIC GALLERY WITH LIVE MONOGRAM EMBOSS OVERLAY
           ========================================================================= */}
@@ -259,7 +252,7 @@ export function ProductDetailInteractive({
       {/* =========================================================================
           RIGHT COLUMN: PRODUCT DETAILS & CONTROLS
           ========================================================================= */}
-      <div style={{ position: 'sticky', top: '6rem' }}>
+      <div className="pdp-details-col">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" style={{ marginBottom: '1.25rem' }}>
           <ol style={{ display: 'flex', gap: '0.5rem', listStyle: 'none', fontSize: '0.75rem', opacity: 0.55 }}>

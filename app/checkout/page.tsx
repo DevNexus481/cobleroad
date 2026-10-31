@@ -109,7 +109,7 @@ export default function CheckoutPage() {
 
       setCreatedOrderId(result.order_id)
 
-      if (!isRazorpayConfigured) {
+      if (!isRazorpayConfigured && !result.razorpay_order_id) {
         setServerError('Payment gateway not configured. Please set up Razorpay credentials to process payments.')
         setIsSubmitting(false)
         return
@@ -121,8 +121,9 @@ export default function CheckoutPage() {
       document.head.appendChild(script)
 
       script.onload = () => {
+        const keyId = result.razorpay_key_id || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID
         const options = {
-          key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+          key: keyId,
           amount: result.razorpay_amount,
           currency: result.currency,
           name: 'Cobleroad',

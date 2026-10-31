@@ -224,6 +224,7 @@ export function ProductAccordions({
           <div key={sec.id} className="luxury-accordion-item">
             <button
               type="button"
+              id={`accordion-trigger-${sec.id}`}
               className="luxury-accordion-trigger"
               onClick={() => toggleSection(sec.id)}
               aria-expanded={isOpen}
@@ -255,7 +256,10 @@ export function ProductAccordions({
               id={`accordion-content-${sec.id}`}
               className={`luxury-accordion-panel ${isOpen ? 'open' : ''}`}
               role="region"
+              aria-labelledby={`accordion-trigger-${sec.id}`}
               aria-hidden={!isOpen}
+              hidden={!isOpen}
+              style={!isOpen ? { display: 'none' } : undefined}
             >
               <div className="luxury-accordion-content">{sec.content}</div>
             </div>

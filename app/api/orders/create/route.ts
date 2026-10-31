@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/server'
 import { createRazorpayOrder, isRazorpayConfigured } from '@/lib/razorpay'
 import { verifyProductPrice, getVariantStock } from '@/lib/products/queries'
+import { isValidUUID, getFallbackVariant } from '@/lib/products/fallback-data'
 import { CreateOrderSchema } from '@/lib/validation'
 import { isCurrencyEnabled } from '@/lib/currency'
 import { createClient } from '@/lib/supabase/server'
@@ -99,16 +100,33 @@ export async function POST(req: NextRequest) {
     // Fetch product/variant names for snapshots
     const supabase = await createAdminClient()
     for (const vi of validatedItems) {
-      const { data: variantData } = await supabase
-        .from('product_variants')
-        .select('sku, colour, products(name)')
-        .eq('id', vi.variant_id)
-        .single()
+      if (isValidUUID(vi.variant_id)) {
+        try {
+          const { data: variantData } = await supabase
+            .from('product_variants')
+            .select('sku, colour, products(name)')
+            .eq('id', vi.variant_id)
+            .single()
 
-      if (variantData) {
-        vi.product_name_snapshot = (variantData.products as any)?.name ?? 'Product'
-        vi.variant_sku_snapshot = variantData.sku
-        vi.variant_colour_snapshot = variantData.colour
+          if (variantData) {
+            vi.product_name_snapshot = (variantData.products as any)?.name ?? 'Product'
+            vi.variant_sku_snapshot = variantData.sku
+            vi.variant_colour_snapshot = variantData.colour
+          }
+        } catch {
+          // Ignore lookup error
+        }
+      }
+
+      if (!vi.product_name_snapshot) {
+        const fallback = getFallbackVariant(vi.variant_id)
+        if (fallback) {
+          vi.product_name_snapshot = fallback.productName
+          vi.variant_colour_snapshot = fallback.colour
+          vi.variant_sku_snapshot = vi.variant_id
+        } else {
+          vi.product_name_snapshot = 'Handcrafted Leather Piece'
+        }
       }
     }
 
@@ -166,8 +184,8 @@ export async function POST(req: NextRequest) {
     await supabase.from('order_items').insert(
       validatedItems.map((vi) => ({
         order_id: order.id,
-        product_id: vi.product_id,
-        variant_id: vi.variant_id,
+        product_id: isValidUUID(vi.product_id) ? vi.product_id : null,
+        variant_id: isValidUUID(vi.variant_id) ? vi.variant_id : null,
         product_name_snapshot: vi.product_name_snapshot,
         variant_sku_snapshot: vi.variant_sku_snapshot,
         variant_colour_snapshot: vi.variant_colour_snapshot,
@@ -217,6 +235,7 @@ export async function POST(req: NextRequest) {
       order_id: order.id,
       order_number: orderNumber,
       razorpay_order_id: razorpayOrder.id,
+      razorpay_key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
       razorpay_amount: totalMinor,
       currency,
     })

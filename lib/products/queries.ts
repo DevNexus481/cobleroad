@@ -5,6 +5,7 @@
 
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/server'
 import type { ProductCard, Product, Collection, CurrencyCode } from '@/types'
+import { isValidUUID, getFallbackVariant } from '@/lib/products/fallback-data'
 
 /**
  * Fetch all published products for the shop page.
@@ -233,22 +234,34 @@ export async function verifyProductPrice(
   variantId: string,
   currency: CurrencyCode
 ): Promise<{ amountMinor: number; productId: string } | null> {
-  const supabase = await createClient()
+  if (isSupabaseConfigured() && isValidUUID(variantId)) {
+    try {
+      const supabase = await createClient()
+      const { data } = await supabase
+        .from('product_prices')
+        .select('amount_minor, product_id, product_variants!inner(product_id, products!inner(status))')
+        .eq('variant_id', variantId)
+        .eq('currency', currency)
+        .single()
 
-  const { data } = await supabase
-    .from('product_prices')
-    .select('amount_minor, product_id, product_variants!inner(product_id, products!inner(status))')
-    .eq('variant_id', variantId)
-    .eq('currency', currency)
-    .single()
+      if (data) {
+        const productStatus = (data as any).product_variants?.products?.status
+        if (productStatus === 'published') {
+          return { amountMinor: data.amount_minor, productId: data.product_id }
+        }
+      }
+    } catch {
+      // Fall through to fallback
+    }
+  }
 
-  if (!data) return null
+  // Fallback to verified catalog for demo / development
+  const fallback = getFallbackVariant(variantId)
+  if (fallback) {
+    return { amountMinor: fallback.amountMinor, productId: fallback.productId }
+  }
 
-  // Validate product is still published
-  const productStatus = (data as any).product_variants?.products?.status
-  if (productStatus !== 'published') return null
-
-  return { amountMinor: data.amount_minor, productId: data.product_id }
+  return null
 }
 
 /**
@@ -256,14 +269,25 @@ export async function verifyProductPrice(
  * Returns current stock for a variant. Never trusts client stock values.
  */
 export async function getVariantStock(variantId: string): Promise<number | null> {
-  const supabase = await createClient()
+  if (isSupabaseConfigured() && isValidUUID(variantId)) {
+    try {
+      const supabase = await createClient()
+      const { data } = await supabase
+        .from('product_variants')
+        .select('stock_quantity, allow_backorder')
+        .eq('id', variantId)
+        .single()
 
-  const { data } = await supabase
-    .from('product_variants')
-    .select('stock_quantity, allow_backorder')
-    .eq('id', variantId)
-    .single()
+      if (data) return data.stock_quantity
+    } catch {
+      // Fall through to fallback
+    }
+  }
 
-  if (!data) return null
-  return data.stock_quantity
+  const fallback = getFallbackVariant(variantId)
+  if (fallback) {
+    return fallback.stock
+  }
+
+  return null
 }

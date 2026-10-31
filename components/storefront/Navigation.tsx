@@ -2,16 +2,22 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Menu, X, Search, ShoppingBag, User } from 'lucide-react'
+import { Menu, X, Search, ShoppingBag, User, Package } from 'lucide-react'
 import { useCart } from './CartProvider'
 import { QuickSearchModal } from './QuickSearchModal'
 
 const NAV_LINKS = [
   { href: '/shop', label: 'Shop' },
-  { href: '/collections', label: 'Collections' },
   { href: '/our-story', label: 'Our Story' },
+  { href: '/our-story', label: 'Craft' },
   { href: '/leather-care', label: 'Leather Care' },
   { href: '/contact', label: 'Contact' },
+]
+
+const ANNOUNCEMENT_ITEMS = [
+  'Complimentary Personalisation on Selected Products',
+  'Free Shipping on Orders Above \u20B95,000',
+  'Crafted for a Lifetime',
 ]
 
 export function Navigation() {
@@ -19,27 +25,32 @@ export function Navigation() {
   const [searchModalOpen, setSearchModalOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [showAnnouncement, setShowAnnouncement] = useState(false)
+  const [announcementIndex, setAnnouncementIndex] = useState(0)
   const { itemCount, toggleCart } = useCart()
 
-  // Initialize announcement bar visibility on mount without hydration mismatch
   useEffect(() => {
     try {
       const isDismissed = localStorage.getItem('cobleroad-dismiss-announcement')
-      if (!isDismissed) {
-        setShowAnnouncement(true)
-      }
+      if (!isDismissed) setShowAnnouncement(true)
     } catch {
       setShowAnnouncement(true)
     }
   }, [])
 
+  // Cycle single announcement on mobile
+  useEffect(() => {
+    if (!showAnnouncement) return
+    const timer = setInterval(() => {
+      setAnnouncementIndex((i) => (i + 1) % ANNOUNCEMENT_ITEMS.length)
+    }, 3500)
+    return () => clearInterval(timer)
+  }, [showAnnouncement])
+
   function handleDismissAnnouncement() {
     setShowAnnouncement(false)
     try {
       localStorage.setItem('cobleroad-dismiss-announcement', 'true')
-    } catch {
-      // Ignore private browsing storage error
-    }
+    } catch {}
   }
 
   useEffect(() => {
@@ -48,40 +59,44 @@ export function Navigation() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Lock scroll when drawer is open
   useEffect(() => {
-    if (drawerOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
+    document.body.style.overflow = drawerOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [drawerOpen])
 
   return (
     <>
-      {/* Announcement bar */}
+      {/* 3-column Announcement bar */}
       {showAnnouncement && (
         <div className="announcement-bar" role="banner" aria-label="Site announcement">
-          <div className="container-site announcement-inner">
-            <span className="announcement-text">
-              Complimentary personalisation on eligible products &mdash; no additional charge.
-            </span>
+          <div className="announcement-inner">
+            {/* Desktop 3-col */}
+            <div className="announcement-3col">
+              {ANNOUNCEMENT_ITEMS.map((item, i) => (
+                <div key={i} className="announcement-col">
+                  <Package size={11} strokeWidth={1.5} aria-hidden="true" />
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+            {/* Mobile single cycling */}
+            <div className="announcement-3col-single">
+              <span className="announcement-text">{ANNOUNCEMENT_ITEMS[announcementIndex]}</span>
+            </div>
             <button
               type="button"
               onClick={handleDismissAnnouncement}
               className="announcement-close-btn"
               aria-label="Dismiss announcement"
-              title="Dismiss announcement"
               id="dismiss-announcement-btn"
             >
-              <X size={14} strokeWidth={1.5} />
+              <X size={13} strokeWidth={1.5} />
             </button>
           </div>
         </div>
       )}
 
-      {/* Main nav with frosted glassmorphism */}
+      {/* Main nav */}
       <nav
         className={`nav-root ${scrolled ? 'scrolled' : ''}`}
         role="navigation"
@@ -99,20 +114,16 @@ export function Navigation() {
             <Menu size={20} strokeWidth={1.5} />
           </button>
 
-          {/* Wordmark */}
-          <Link href="/" className="nav-wordmark" aria-label="Cobleroad — home">
-            Cobleroad
+          {/* Logo lockup */}
+          <Link href="/" className="nav-logo-wrap" aria-label="Cobleroad — home">
+            <span className="nav-wordmark">Cobleroad</span>
+            <span className="nav-logo-tagline">Leather · Craft · Journey</span>
           </Link>
 
-          {/* Desktop nav links with slide-in underline */}
+          {/* Desktop nav links */}
           <div className="hidden lg:flex items-center gap-8" role="menubar">
             {NAV_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="nav-link"
-                role="menuitem"
-              >
+              <Link key={`${link.href}-${link.label}`} href={link.href} className="nav-link" role="menuitem">
                 {link.label}
               </Link>
             ))}
@@ -120,7 +131,22 @@ export function Navigation() {
 
           {/* Actions */}
           <div className="flex items-center gap-1">
-            {/* Instant Ambient Search Trigger */}
+            {/* INR currency indicator */}
+            <span
+              className="hidden lg:flex items-center"
+              style={{
+                fontSize: '0.6875rem',
+                letterSpacing: '0.08em',
+                color: 'var(--colour-charcoal)',
+                opacity: 0.55,
+                marginRight: '0.25rem',
+                fontWeight: 500,
+              }}
+              aria-label="Currency: Indian Rupee"
+            >
+              INR ₹
+            </span>
+
             <button
               type="button"
               onClick={() => setSearchModalOpen(true)}
@@ -131,16 +157,10 @@ export function Navigation() {
               <Search size={18} strokeWidth={1.5} />
             </button>
 
-            <Link
-              href="/account"
-              className="nav-icon-btn"
-              aria-label="My account"
-              id="nav-account-btn"
-            >
+            <Link href="/account" className="nav-icon-btn" aria-label="My account" id="nav-account-btn">
               <User size={18} strokeWidth={1.5} />
             </Link>
 
-            {/* Slide-over Cart Trigger */}
             <button
               type="button"
               onClick={toggleCart}
@@ -160,10 +180,7 @@ export function Navigation() {
       </nav>
 
       {/* Quick Search Modal */}
-      <QuickSearchModal
-        isOpen={searchModalOpen}
-        onClose={() => setSearchModalOpen(false)}
-      />
+      <QuickSearchModal isOpen={searchModalOpen} onClose={() => setSearchModalOpen(false)} />
 
       {/* Mobile overlay */}
       <div
@@ -179,30 +196,20 @@ export function Navigation() {
         aria-label="Navigation menu"
         aria-modal={drawerOpen}
       >
-        {/* Drawer header */}
         <div className="flex items-center justify-between mb-8">
-          <Link
-            href="/"
-            className="nav-wordmark"
-            onClick={() => setDrawerOpen(false)}
-            style={{ fontSize: '1.25rem' }}
-          >
-            Cobleroad
+          <Link href="/" className="nav-logo-wrap" onClick={() => setDrawerOpen(false)}>
+            <span className="nav-wordmark" style={{ fontSize: '1.25rem' }}>Cobleroad</span>
+            <span className="nav-logo-tagline">Leather · Craft · Journey</span>
           </Link>
-          <button
-            className="nav-icon-btn"
-            onClick={() => setDrawerOpen(false)}
-            aria-label="Close navigation menu"
-          >
+          <button className="nav-icon-btn" onClick={() => setDrawerOpen(false)} aria-label="Close navigation menu">
             <X size={20} strokeWidth={1.5} />
           </button>
         </div>
 
-        {/* Links */}
         <nav aria-label="Mobile navigation">
           {NAV_LINKS.map((link) => (
             <Link
-              key={link.href}
+              key={`mobile-${link.href}-${link.label}`}
               href={link.href}
               className="nav-drawer-link"
               onClick={() => setDrawerOpen(false)}
@@ -212,22 +219,13 @@ export function Navigation() {
           ))}
         </nav>
 
-        {/* Bottom actions */}
         <div className="mt-auto pt-8 flex gap-4">
-          <Link
-            href="/account"
-            className="nav-drawer-link"
-            onClick={() => setDrawerOpen(false)}
-            style={{ border: 'none', padding: 0, fontSize: '0.8125rem', opacity: 0.6 }}
-          >
+          <Link href="/account" className="nav-drawer-link" onClick={() => setDrawerOpen(false)}
+            style={{ border: 'none', padding: 0, fontSize: '0.8125rem', opacity: 0.6 }}>
             Account
           </Link>
-          <Link
-            href="/search"
-            className="nav-drawer-link"
-            onClick={() => setDrawerOpen(false)}
-            style={{ border: 'none', padding: 0, fontSize: '0.8125rem', opacity: 0.6 }}
-          >
+          <Link href="/search" className="nav-drawer-link" onClick={() => setDrawerOpen(false)}
+            style={{ border: 'none', padding: 0, fontSize: '0.8125rem', opacity: 0.6 }}>
             Search
           </Link>
         </div>

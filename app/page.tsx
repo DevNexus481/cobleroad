@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, Scissors, Package, Leaf } from 'lucide-react'
+import { ArrowRight, Truck, RefreshCw, Shield, Leaf } from 'lucide-react'
 import { ProductGridCard } from '@/components/storefront/ProductGridCard'
+import PerspectiveTunnelHero from '@/components/ui/perspective-tunnel-hero'
 import { getPublishedProducts } from '@/lib/products/queries'
 
 export const metadata: Metadata = {
@@ -11,60 +12,66 @@ export const metadata: Metadata = {
     'Discover Cobleroad — genuine leather bags, briefcases, totes, backpacks, and small leather goods for India and beyond. Built to carry a lifetime.',
 }
 
-
-// =============================================================================
-// Featured Collections (matches seed data)
-// =============================================================================
-const FEATURED_COLLECTIONS = [
+const CATEGORY_TILES = [
   {
     slug: 'work-bags',
     name: 'Work Bags',
-    desc: 'Structured leather for the considered professional.',
     image: '/images/products/laptop-bag.jpg',
   },
   {
     slug: 'everyday-bags',
     name: 'Everyday Bags',
-    desc: 'Versatile companions for daily life and beyond.',
     image: '/images/products/tote-espresso.jpg',
   },
   {
     slug: 'travel-essentials',
     name: 'Travel Essentials',
-    desc: 'Travel with intention. Leather built for the journey.',
     image: '/images/products/duffle-travel.jpg',
   },
   {
     slug: 'small-leather-goods',
     name: 'Small Leather Goods',
-    desc: 'The finer details, carried with care.',
     image: '/images/products/wallet-slim.jpg',
   },
+  {
+    slug: 'backpacks',
+    name: 'Backpacks',
+    image: '/images/products/backpack-tan.jpg',
+  },
+  {
+    slug: 'accessories',
+    name: 'Accessories',
+    image: '/images/products/cardholder.jpg',
+  },
 ]
 
-// =============================================================================
-// Craft pillars (no unverified claims)
-// =============================================================================
-const CRAFT_PILLARS = [
+const TRUST_ITEMS = [
   {
-    icon: <Scissors size={20} strokeWidth={1.5} />,
-    title: 'Considered Design',
-    body: 'Every pocket, strap, and closure is placed with purpose. Nothing superfluous.',
+    icon: <Truck size={18} strokeWidth={1.5} />,
+    label: 'Free Shipping',
+    sub: 'All over India',
   },
   {
-    icon: <Package size={20} strokeWidth={1.5} />,
-    title: 'Genuine Leather',
-    body: 'We use genuine leather throughout. Material descriptions and grades are provided only when verified.',
+    icon: <RefreshCw size={18} strokeWidth={1.5} />,
+    label: 'Easy Returns',
+    sub: '14-Day policy',
   },
   {
-    icon: <Leaf size={20} strokeWidth={1.5} />,
-    title: 'Built to Last',
-    body: 'Good leather is designed to improve with use. Each Cobleroad piece is built to accompany you for years.',
+    icon: <Shield size={18} strokeWidth={1.5} />,
+    label: 'Lifetime Guarantee',
+    sub: 'On craftsmanship',
+  },
+  {
+    icon: <Leaf size={18} strokeWidth={1.5} />,
+    label: 'Premium Leather',
+    sub: 'Built to last',
   },
 ]
+
+const HERO_SIDE_LINKS = ['Travel', 'Work', 'Life', 'Personalise']
 
 export default async function HomePage() {
-  const { products: liveProducts } = await getPublishedProducts({ limit: 4 })
+  const { products: liveProducts } = await getPublishedProducts({ limit: 5 })
   const hasLive = liveProducts && liveProducts.length > 0
 
   const featuredItems = hasLive
@@ -91,9 +98,9 @@ export default async function HomePage() {
           primaryImage: { id: 'adv-img', url: '/images/hero/hero-briefcase.jpg', alt: 'The Advocate Briefcase' },
           variants: [
             { id: 'adv-cog', colour: 'Cognac', colour_hex: '#9A633F', image_url: '/images/hero/hero-briefcase.jpg', stock_quantity: 12, prices: [{ id: 'p1', currency: 'INR' as const, amount_minor: 1299900 }] },
-            { id: 'adv-esp', colour: 'Espresso', colour_hex: '#2B211D', image_url: '/images/products/variants/advocate-briefcase-espresso-front.webp', stock_quantity: 8, prices: [{ id: 'p2', currency: 'INR' as const, amount_minor: 1299900 }] },
-            { id: 'adv-blk', colour: 'Black', colour_hex: '#1F1B18', image_url: '/images/products/variants/advocate-briefcase-black-front.webp', stock_quantity: 10, prices: [{ id: 'p3', currency: 'INR' as const, amount_minor: 1299900 }] },
-            { id: 'adv-tan', colour: 'Tan', colour_hex: '#B5784E', image_url: '/images/products/variants/advocate-briefcase-tan-front.webp', stock_quantity: 6, prices: [{ id: 'p4', currency: 'INR' as const, amount_minor: 1299900 }] },
+            { id: 'adv-esp', colour: 'Espresso', colour_hex: '#2B211D', image_url: '/images/products/variants/advocate-briefcase-espresso-front.jpg', stock_quantity: 8, prices: [{ id: 'p2', currency: 'INR' as const, amount_minor: 1299900 }] },
+            { id: 'adv-blk', colour: 'Black', colour_hex: '#1F1B18', image_url: '/images/products/variants/advocate-briefcase-black-front.jpg', stock_quantity: 10, prices: [{ id: 'p3', currency: 'INR' as const, amount_minor: 1299900 }] },
+            { id: 'adv-tan', colour: 'Tan', colour_hex: '#B5784E', image_url: '/images/products/variants/advocate-briefcase-tan-front.jpg', stock_quantity: 6, prices: [{ id: 'p4', currency: 'INR' as const, amount_minor: 1299900 }] },
           ],
         },
         {
@@ -107,9 +114,9 @@ export default async function HomePage() {
           primaryImage: { id: 'fie-img', url: '/images/products/backpack-tan.jpg', alt: 'The Fielder Backpack' },
           variants: [
             { id: 'fie-tan', colour: 'Tan', colour_hex: '#B5784E', image_url: '/images/products/backpack-tan.jpg', stock_quantity: 15, prices: [{ id: 'p1', currency: 'INR' as const, amount_minor: 1199900 }] },
-            { id: 'fie-esp', colour: 'Espresso', colour_hex: '#2B211D', image_url: '/images/products/variants/fielder-backpack-espresso-front.webp', stock_quantity: 10, prices: [{ id: 'p2', currency: 'INR' as const, amount_minor: 1199900 }] },
-            { id: 'fie-cog', colour: 'Cognac', colour_hex: '#9A633F', image_url: '/images/products/variants/fielder-backpack-cognac-front.webp', stock_quantity: 8, prices: [{ id: 'p3', currency: 'INR' as const, amount_minor: 1199900 }] },
-            { id: 'fie-blk', colour: 'Black', colour_hex: '#1F1B18', image_url: '/images/products/variants/fielder-backpack-black-front.webp', stock_quantity: 12, prices: [{ id: 'p4', currency: 'INR' as const, amount_minor: 1199900 }] },
+            { id: 'fie-esp', colour: 'Espresso', colour_hex: '#2B211D', image_url: '/images/products/variants/fielder-backpack-espresso-front.jpg', stock_quantity: 10, prices: [{ id: 'p2', currency: 'INR' as const, amount_minor: 1199900 }] },
+            { id: 'fie-cog', colour: 'Cognac', colour_hex: '#9A633F', image_url: '/images/products/variants/fielder-backpack-cognac-front.jpg', stock_quantity: 8, prices: [{ id: 'p3', currency: 'INR' as const, amount_minor: 1199900 }] },
+            { id: 'fie-blk', colour: 'Black', colour_hex: '#1F1B18', image_url: '/images/products/variants/fielder-backpack-black-front.jpg', stock_quantity: 12, prices: [{ id: 'p4', currency: 'INR' as const, amount_minor: 1199900 }] },
           ],
         },
         {
@@ -123,9 +130,9 @@ export default async function HomePage() {
           primaryImage: { id: 'mar-img', url: '/images/products/tote-espresso.jpg', alt: 'The Marlow Tote' },
           variants: [
             { id: 'mar-esp', colour: 'Espresso', colour_hex: '#2B211D', image_url: '/images/products/tote-espresso.jpg', stock_quantity: 18, prices: [{ id: 'p1', currency: 'INR' as const, amount_minor: 899900 }] },
-            { id: 'mar-cog', colour: 'Cognac', colour_hex: '#9A633F', image_url: '/images/products/variants/marlow-tote-cognac-front.webp', stock_quantity: 14, prices: [{ id: 'p2', currency: 'INR' as const, amount_minor: 899900 }] },
-            { id: 'mar-blk', colour: 'Black', colour_hex: '#1F1B18', image_url: '/images/products/variants/marlow-tote-black-front.webp', stock_quantity: 9, prices: [{ id: 'p3', currency: 'INR' as const, amount_minor: 899900 }] },
-            { id: 'mar-tan', colour: 'Tan', colour_hex: '#B5784E', image_url: '/images/products/variants/marlow-tote-tan-front.webp', stock_quantity: 11, prices: [{ id: 'p4', currency: 'INR' as const, amount_minor: 899900 }] },
+            { id: 'mar-cog', colour: 'Cognac', colour_hex: '#9A633F', image_url: '/images/products/variants/marlow-tote-cognac-front.jpg', stock_quantity: 14, prices: [{ id: 'p2', currency: 'INR' as const, amount_minor: 899900 }] },
+            { id: 'mar-blk', colour: 'Black', colour_hex: '#1F1B18', image_url: '/images/products/variants/marlow-tote-black-front.jpg', stock_quantity: 9, prices: [{ id: 'p3', currency: 'INR' as const, amount_minor: 899900 }] },
+            { id: 'mar-tan', colour: 'Tan', colour_hex: '#B5784E', image_url: '/images/products/variants/marlow-tote-tan-front.jpg', stock_quantity: 11, prices: [{ id: 'p4', currency: 'INR' as const, amount_minor: 899900 }] },
           ],
         },
         {
@@ -139,12 +146,26 @@ export default async function HomePage() {
           primaryImage: { id: 'mer-img', url: '/images/products/duffle-travel.jpg', alt: 'The Meridian Duffle' },
           variants: [
             { id: 'mer-cog', colour: 'Cognac', colour_hex: '#9A633F', image_url: '/images/products/duffle-travel.jpg', stock_quantity: 7, prices: [{ id: 'p1', currency: 'INR' as const, amount_minor: 1599900 }] },
-            { id: 'mer-esp', colour: 'Espresso', colour_hex: '#2B211D', image_url: '/images/products/variants/meridian-duffle-espresso-front.webp', stock_quantity: 5, prices: [{ id: 'p2', currency: 'INR' as const, amount_minor: 1599900 }] },
-            { id: 'mer-blk', colour: 'Black', colour_hex: '#1F1B18', image_url: '/images/products/variants/meridian-duffle-black-front.webp', stock_quantity: 8, prices: [{ id: 'p3', currency: 'INR' as const, amount_minor: 1599900 }] },
-            { id: 'mer-olv', colour: 'Olive', colour_hex: '#6D7155', image_url: '/images/products/variants/meridian-duffle-olive-front.webp', stock_quantity: 6, prices: [{ id: 'p4', currency: 'INR' as const, amount_minor: 1599900 }] },
+            { id: 'mer-esp', colour: 'Espresso', colour_hex: '#2B211D', image_url: '/images/products/variants/meridian-duffle-espresso-front.jpg', stock_quantity: 5, prices: [{ id: 'p2', currency: 'INR' as const, amount_minor: 1599900 }] },
+            { id: 'mer-blk', colour: 'Black', colour_hex: '#1F1B18', image_url: '/images/products/variants/meridian-duffle-black-front.jpg', stock_quantity: 8, prices: [{ id: 'p3', currency: 'INR' as const, amount_minor: 1599900 }] },
+            { id: 'mer-olv', colour: 'Olive', colour_hex: '#6D7155', image_url: '/images/products/variants/meridian-duffle-olive-front.jpg', stock_quantity: 6, prices: [{ id: 'p4', currency: 'INR' as const, amount_minor: 1599900 }] },
+          ],
+        },
+        {
+          id: 'marlow-tote-messenger',
+          slug: 'messenger-cognac',
+          name: 'The Ridge Messenger',
+          desc: 'Slim shoulder messenger with quick-access flap.',
+          isNew: false,
+          isDemo: true,
+          personalisable: true,
+          primaryImage: { id: 'msg-img', url: '/images/products/messenger-cognac.jpg', alt: 'The Ridge Messenger' },
+          variants: [
+            { id: 'msg-cog', colour: 'Cognac', colour_hex: '#9A633F', image_url: '/images/products/messenger-cognac.jpg', stock_quantity: 10, prices: [{ id: 'p1', currency: 'INR' as const, amount_minor: 749900 }] },
           ],
         },
       ]
+
   return (
     <>
       {/* ===== HERO ===== */}
@@ -155,367 +176,279 @@ export default async function HomePage() {
             alt=""
             fill
             priority
-            quality={90}
+            quality={92}
             sizes="100vw"
-            style={{ objectFit: 'cover', objectPosition: 'center 30%' }}
+            style={{ objectFit: 'cover', objectPosition: 'center 25%' }}
           />
         </div>
         <div className="hero__overlay" aria-hidden="true" />
-        <div className="container-site hero__content" style={{ paddingTop: '3rem', paddingBottom: '4rem' }}>
-          <span className="hero__eyebrow">New Collection · Autumn 2026</span>
+
+        {/* Content */}
+        <div className="container-site hero__content" style={{ paddingTop: '3.5rem', paddingBottom: '5.5rem', zIndex: 2 }}>
+          <span className="hero__eyebrow">Leather Since Ages.</span>
           <h1 className="hero__title">
-            Made to Carry<br />a Lifetime.
+            Made to Carry<br />
+            <span className="hero__title-accent">a Lifetime.</span>
           </h1>
           <p className="hero__body">
-            Cobleroad makes genuine leather bags and accessories for those who carry with
-            intention. Each piece is designed to improve with use and carry quietly.
+            Timeless leather goods for a more meaningful journey.
           </p>
           <div className="hero__actions">
-            <Link href="/shop" className="btn btn-primary btn-lg" id="hero-cta-primary">
-              Explore the Collection
-            </Link>
-            <Link
-              href="/our-story"
-              className="btn btn-ghost btn-lg"
-              id="hero-cta-secondary"
-              style={{ color: 'var(--colour-espresso)', fontWeight: 500 }}
-            >
-              Discover Our Craft
-              <ArrowRight size={16} strokeWidth={1.5} />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== COLLECTIONS ===== */}
-      <section className="section-padding" aria-labelledby="collections-heading">
-        <div className="container-site">
-          <div style={{ marginBottom: '2.5rem' }}>
-            <span className="section-label">Collections</span>
-            <h2 className="section-title" id="collections-heading">
-              Shop by Category
-            </h2>
-          </div>
-
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-              gap: '1.25rem',
-            }}
-          >
-            {FEATURED_COLLECTIONS.map((col) => (
-              <Link
-                key={col.slug}
-                href={`/collections/${col.slug}`}
-                className="collection-card"
-                aria-label={`Shop ${col.name}`}
-              >
-                <Image
-                  src={col.image}
-                  alt={col.name}
-                  fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                  className="collection-card__img"
-                  style={{ objectFit: 'cover' }}
-                />
-                <div className="collection-card__overlay" aria-hidden="true" />
-                <div className="collection-card__label">
-                  <span className="collection-card__label-eyebrow">Collection</span>
-                  <span className="collection-card__label-name">{col.name}</span>
-                  <p
-                    style={{
-                      marginTop: '0.375rem',
-                      fontSize: '0.8125rem',
-                      opacity: 0.75,
-                      lineHeight: 1.4,
-                    }}
-                  >
-                    {col.desc}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== CRAFT STORY ===== */}
-      <section
-        className="section-padding"
-        aria-labelledby="craft-heading"
-        style={{ backgroundColor: 'var(--colour-parchment)' }}
-      >
-        <div className="container-site">
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-              gap: '4rem',
-              alignItems: 'center',
-            }}
-          >
-            {/* Image side */}
-            <div
-              style={{
-                position: 'relative',
-                aspectRatio: '4/5',
-                overflow: 'hidden',
-              }}
-            >
-              <Image
-                src="/images/lifestyle/lifestyle-desk.jpg"
-                alt="A cognac leather briefcase resting on a wooden desk in warm morning light"
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                style={{ objectFit: 'cover' }}
-                quality={85}
-              />
-            </div>
-
-            {/* Text side */}
-            <div>
-              <span className="section-label">The Craft</span>
-              <h2
-                className="section-title"
-                id="craft-heading"
-                style={{ marginBottom: '1.5rem' }}
-              >
-                Designed for<br />How You Live
-              </h2>
-              <p className="section-body" style={{ marginBottom: '2rem' }}>
-                A Cobleroad bag doesn't announce itself. It becomes part of your routine — the
-                briefcase that goes into every meeting, the tote that carries everything without
-                complaint, the wallet that you forget about because it simply works.
-              </p>
-              <p className="section-body" style={{ marginBottom: '2.5rem', opacity: 0.75 }}>
-                Every detail is considered. Every material is genuine. Every price is what we
-                actually charge — no inflation, no artificial markdowns.
-              </p>
-
-              {/* Pillars */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                {CRAFT_PILLARS.map((p) => (
-                  <div key={p.title} style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-                    <span
-                      style={{
-                        color: 'var(--colour-cognac)',
-                        flexShrink: 0,
-                        marginTop: '0.125rem',
-                      }}
-                      aria-hidden="true"
-                    >
-                      {p.icon}
-                    </span>
-                    <div>
-                      <p
-                        style={{
-                          fontWeight: 600,
-                          fontSize: '0.875rem',
-                          color: 'var(--colour-espresso)',
-                          marginBottom: '0.25rem',
-                          letterSpacing: '0.02em',
-                        }}
-                      >
-                        {p.title}
-                      </p>
-                      <p style={{ fontSize: '0.875rem', lineHeight: 1.65, opacity: 0.7 }}>
-                        {p.body}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div style={{ marginTop: '2.5rem' }}>
-                <Link href="/our-story" className="btn btn-secondary">
-                  Our Story
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== PERSONALISATION ===== */}
-      <section
-        className="section-padding"
-        aria-labelledby="personalisation-heading"
-        style={{ backgroundColor: 'var(--colour-ivory)' }}
-      >
-        <div className="container-site" style={{ textAlign: 'center' }}>
-          <span className="section-label" style={{ display: 'block' }}>
-            Complimentary Personalisation
-          </span>
-          <h2
-            className="section-title"
-            id="personalisation-heading"
-            style={{ marginBottom: '1.25rem', display: 'inline-block' }}
-          >
-            Made for You
-          </h2>
-          <p
-            style={{
-              fontSize: '1rem',
-              color: 'var(--colour-charcoal)',
-              lineHeight: 1.7,
-              maxWidth: '48ch',
-              margin: '0 auto 2.5rem',
-            }}
-          >
-            Eligible Cobleroad pieces can be personalised with your initials or a short
-            monogram. Personalisation is complimentary — there is no additional charge.
-            Select eligible products are marked on their product page.
-          </p>
-          <Link href="/shop?personalisation=true" className="btn btn-accent">
-            Shop Personalisable Pieces
-          </Link>
-        </div>
-      </section>
-
-      {/* ===== FEATURED PRODUCTS (placeholder until Supabase connected) ===== */}
-      <section
-        className="section-padding"
-        aria-labelledby="featured-heading"
-        style={{ backgroundColor: 'var(--colour-paper)' }}
-      >
-        <div className="container-site">
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'flex-end',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              gap: '1rem',
-              marginBottom: '2.5rem',
-            }}
-          >
-            <div>
-              <span className="section-label">Featured</span>
-              <h2 className="section-title" id="featured-heading">
-                New Arrivals
-              </h2>
-            </div>
             <Link
               href="/shop"
-              className="btn btn-ghost"
-              style={{ fontSize: '0.75rem', letterSpacing: '0.1em' }}
+              className="btn btn-secondary btn-lg"
+              id="hero-cta-primary"
+              style={{ borderColor: 'rgba(247,244,238,0.6)', color: 'var(--colour-ivory)' }}
             >
-              View all <ArrowRight size={14} />
+              Explore the Collection <ArrowRight size={15} strokeWidth={1.5} />
+            </Link>
+            <Link
+              href="/personalisation"
+              className="btn btn-secondary btn-lg"
+              style={{
+                borderColor: 'rgba(247,244,238,0.35)',
+                color: 'rgba(247,244,238,0.88)',
+                backgroundColor: 'rgba(20, 10, 5, 0.35)',
+                backdropFilter: 'blur(4px)',
+              }}
+            >
+              Bespoke Monogramming <ArrowRight size={15} strokeWidth={1.5} />
+            </Link>
+          </div>
+        </div>
+
+        {/* Right-side vertical category nav */}
+        <nav className="hero__side-nav" aria-label="Browse by journey">
+          <Link href="/collections/travel-essentials" className="hero__side-nav-item">
+            Travel
+          </Link>
+          <Link href="/collections/work-bags" className="hero__side-nav-item">
+            Work
+          </Link>
+          <Link href="/collections/everyday-bags" className="hero__side-nav-item">
+            Life
+          </Link>
+          <Link href="/personalisation" className="hero__side-nav-item">
+            Personalise
+          </Link>
+
+          <span className="hero__side-divider" aria-hidden="true" />
+          <span className="hero__side-tagline">
+            One Material.<br />
+            A Thousand<br />
+            Journeys.
+          </span>
+        </nav>
+
+        {/* Coordinates */}
+        <div className="hero__coordinates" aria-hidden="true">
+          <span>12.9716° N  77.5946° E  |  India</span>
+        </div>
+      </section>
+
+      {/* ===== SHOP BY CATEGORY ===== */}
+      <section className="category-row" aria-labelledby="category-heading">
+        <div className="category-row__header">
+          <div className="category-row__label-block">
+            <span className="category-row__label">Shop by Category</span>
+            <h2 className="category-row__title" id="category-heading">
+              Objects for<br />Every Journey.
+            </h2>
+            <p className="category-row__subtitle">Crafted to age with you.</p>
+          </div>
+        </div>
+        <div className="category-row__scroll" role="list">
+          {CATEGORY_TILES.map((cat) => (
+            <Link
+              key={cat.slug}
+              href={`/collections/${cat.slug}`}
+              className="category-tile"
+              role="listitem"
+              aria-label={`Shop ${cat.name}`}
+            >
+              <div className="category-tile__image-wrap">
+                <Image
+                  src={cat.image}
+                  alt={cat.name}
+                  fill
+                  sizes="220px"
+                  style={{ objectFit: 'cover' }}
+                />
+              </div>
+              <span className="category-tile__name">{cat.name}</span>
+              <span className="category-tile__arrow">→</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ===== CRAFT DARK SECTION ===== */}
+      <section className="craft-dark" aria-labelledby="craft-heading">
+        {/* Left: artisan image */}
+        <div className="craft-dark__image-half">
+          <Image
+            src="/images/lifestyle/lifestyle-desk.jpg"
+            alt="Artisan crafting leather goods by hand"
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            style={{ objectFit: 'cover' }}
+            quality={88}
+          />
+          <div className="craft-dark__play-btn">
+            <span className="craft-dark__play-icon" aria-hidden="true">
+              <svg width="10" height="12" viewBox="0 0 10 12" fill="currentColor">
+                <path d="M0 0L10 6L0 12V0Z" />
+              </svg>
+            </span>
+            <span>The Craft<br />In Every Stitch</span>
+          </div>
+        </div>
+
+        {/* Right: content */}
+        <div className="craft-dark__content">
+          <span className="craft-dark__label">The Craft</span>
+          <h2 className="craft-dark__title" id="craft-heading">
+            More than a Bag.<br />
+            A Story in Leather.
+          </h2>
+          <p className="craft-dark__body">
+            Full-grain leather. Thoughtful design. Skilled hands. Every detail is
+            crafted to age beautifully, travelling with you for years to come.
+          </p>
+          <Link href="/our-story" className="craft-dark__cta">
+            Discover Our Craft <ArrowRight size={13} />
+          </Link>
+
+          {/* 3 detail thumbnails */}
+          <div className="craft-dark__details">
+            {[
+              { img: '/images/products/cardholder.jpg', label: 'Full-Grain\nLeather' },
+              { img: '/images/products/wallet-slim.jpg', label: 'Solid Brass\nHardware' },
+              { img: '/images/products/passport-holder.jpg', label: 'Hand-Finished\nDetails' },
+            ].map((d) => (
+              <div key={d.label} className="craft-detail-thumb">
+                <Image
+                  src={d.img}
+                  alt={d.label.replace('\n', ' ')}
+                  width={120}
+                  height={120}
+                  className="craft-detail-thumb__image"
+                  style={{ objectFit: 'cover' }}
+                />
+                <span className="craft-detail-thumb__label" style={{ whiteSpace: 'pre-line' }}>{d.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== EDITORIAL BENTO GRID ===== */}
+      <section className="editorial-bento" aria-label="Editorial collection">
+        {/* Tile 1 */}
+        <div className="bento-tile">
+          <div className="bento-tile__bg" aria-hidden="true">
+            <Image src="/images/lifestyle/lifestyle-desk.jpg" alt="" fill sizes="33vw" style={{ objectFit: 'cover' }} />
+          </div>
+          <div className="bento-tile__content">
+            <span className="bento-tile__eyebrow">The Craft</span>
+            <h3 className="bento-tile__title">
+              Handed Down.<br />
+              <em>Carried Forward.</em>
+            </h3>
+            <Link href="/our-story" className="bento-tile__cta">
+              See the Craft <ArrowRight size={11} />
+            </Link>
+          </div>
+        </div>
+
+        {/* Tile 2 */}
+        <div className="bento-tile">
+          <div className="bento-tile__bg" aria-hidden="true">
+            <Image src="/images/products/duffle-travel.jpg" alt="" fill sizes="33vw" style={{ objectFit: 'cover' }} />
+          </div>
+          <div className="bento-tile__content">
+            <span className="bento-tile__eyebrow">A Modern Classic</span>
+            <h3 className="bento-tile__title">
+              For Those Who<br />
+              <em>Move Differently.</em>
+            </h3>
+            <Link href="/collections/everyday-bags" className="bento-tile__cta">
+              Shop Bags <ArrowRight size={11} />
+            </Link>
+          </div>
+        </div>
+
+        {/* Tile 3 */}
+        <div className="bento-tile">
+          <div className="bento-tile__bg" aria-hidden="true">
+            <Image src="/images/products/backpack-tan.jpg" alt="" fill sizes="33vw" style={{ objectFit: 'cover' }} />
+          </div>
+          <div className="bento-tile__content">
+            <span className="bento-tile__eyebrow">Complimentary</span>
+            <h3 className="bento-tile__title">
+              Make It<br />
+              <em>Yours.</em>
+            </h3>
+            <Link href="/personalisation" className="bento-tile__cta">
+              Add Monogram <ArrowRight size={11} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== THE ESSENTIALS ===== */}
+      <section className="essentials-section" aria-labelledby="essentials-heading">
+        <div className="essentials-inner">
+          {/* Label col */}
+          <div className="essentials-label-col">
+            <span className="essentials-label">Featured Products</span>
+            <h2 className="essentials-title" id="essentials-heading">
+              The<br />Essentials
+            </h2>
+            <p className="essentials-subtitle">Objects made to stay.</p>
+            <Link href="/shop" className="btn btn-secondary btn-sm" style={{ marginTop: '1.5rem' }}>
+              View All <ArrowRight size={13} />
             </Link>
           </div>
 
-          {/* Product grid with cinematic hover zoom and interactive swatches */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-              gap: '2.5rem 1.75rem',
-            }}
-          >
+          {/* Scrollable product cards */}
+          <div className="essentials-scroll">
             {featuredItems.map((product) => (
-              <ProductGridCard
-                key={product.slug}
-                id={product.id}
-                slug={product.slug}
-                name={product.name}
-                shortDescription={product.desc}
-                isFeatured={product.isNew}
-                isDemo={product.isDemo}
-                personalisable={product.personalisable}
-                primaryImage={product.primaryImage}
-                variants={product.variants}
-              />
+              <div key={product.slug} style={{ flex: '0 0 auto', width: '220px' }}>
+                <ProductGridCard
+                  id={product.id}
+                  slug={product.slug}
+                  name={product.name}
+                  shortDescription={product.desc}
+                  isFeatured={product.isNew}
+                  isDemo={product.isDemo}
+                  personalisable={product.personalisable}
+                  primaryImage={product.primaryImage}
+                  variants={product.variants}
+                />
+              </div>
             ))}
           </div>
+        </div>
+      </section>
 
-          <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-            <div className="demo-notice" style={{ maxWidth: '32rem', margin: '0 auto', textAlign: 'left' }}>
-              <span>ℹ</span>
-              <span>
-                <strong>Development mode:</strong> Featured products above use demo data. Connect
-                Supabase and run the seed migration to display live catalogue with real pricing.
-                Products remain in draft until an administrator reviews and publishes them.
-              </span>
+      {/* ===== 3D PERSPECTIVE TUNNEL ===== */}
+      <PerspectiveTunnelHero />
+
+      {/* ===== TRUST BAR ===== */}
+      <div className="trust-bar" role="complementary" aria-label="Shopping assurances">
+        <div className="trust-bar__inner">
+          {TRUST_ITEMS.map((item) => (
+            <div key={item.label} className="trust-item">
+              <span className="trust-item__icon" aria-hidden="true">{item.icon}</span>
+              <div>
+                <span className="trust-item__text-label">{item.label}</span>
+                <span className="trust-item__text-sub">{item.sub}</span>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
-      </section>
-
-      {/* ===== BRAND STORY ===== */}
-      <section
-        aria-labelledby="story-heading"
-        style={{
-          backgroundColor: 'var(--colour-espresso)',
-          color: 'var(--colour-ivory)',
-          padding: '6rem 0',
-        }}
-      >
-        <div className="container-site" style={{ maxWidth: '42rem' }}>
-          <span
-            style={{
-              fontSize: '0.6875rem',
-              letterSpacing: '0.18em',
-              textTransform: 'uppercase',
-              color: 'var(--colour-cognac-light)',
-              display: 'block',
-              marginBottom: '1.25rem',
-            }}
-          >
-            The Story
-          </span>
-          <h2
-            id="story-heading"
-            style={{
-              fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(2rem, 4vw, 2.75rem)',
-              fontWeight: 300,
-              lineHeight: 1.1,
-              marginBottom: '1.5rem',
-            }}
-          >
-            A Brand Built on<br />Honest Leather Work
-          </h2>
-          <p
-            style={{
-              fontSize: '1rem',
-              lineHeight: 1.75,
-              color: 'rgba(247,244,238,0.75)',
-              marginBottom: '1.25rem',
-            }}
-          >
-            Cobleroad was built around a simple belief: that a well-made leather bag should
-            be sold at an honest price, without inflated markups or invented heritage.
-          </p>
-          <p
-            style={{
-              fontSize: '1rem',
-              lineHeight: 1.75,
-              color: 'rgba(247,244,238,0.6)',
-              marginBottom: '2.5rem',
-            }}
-          >
-            We describe our materials accurately. We price our products clearly. We do not
-            fabricate reviews, certifications, or tanning claims. What we make, we stand behind.
-          </p>
-          <Link
-            href="/our-story"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              fontSize: '0.75rem',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              color: 'var(--colour-cognac-light)',
-              textDecoration: 'none',
-              fontWeight: 500,
-            }}
-          >
-            Read our story <ArrowRight size={14} />
-          </Link>
-        </div>
-      </section>
+      </div>
     </>
   )
 }

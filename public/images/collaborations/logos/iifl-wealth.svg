@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 170" width="600" height="170">
+  <g transform="translate(80, 85)">
+    <circle cx="0" cy="0" r="42" fill="#F37021"/>
+    <circle cx="0" cy="0" r="33" fill="#FFFFFF"/>
+    <circle cx="0" cy="0" r="24" fill="#F37021"/>
+    <circle cx="0" cy="0" r="14" fill="#FFFFFF"/>
+    <circle cx="0" cy="0" r="7" fill="#F37021"/>
+  </g>
+  <text x="150" y="94" font-family="'Helvetica Neue', Arial, sans-serif" font-size="58" font-weight="900" letter-spacing="1" fill="#1B365D">IIFL</text>
+  <text x="152" y="124" font-family="'Helvetica Neue', Arial, sans-serif" font-size="12" font-weight="bold" letter-spacing="1" fill="#1B365D">WEALTH &amp; ASSET MANAGEMENT</text>
+</svg>

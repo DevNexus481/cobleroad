@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
     'localhost',
   ],
   images: {
-    qualities: [75, 85, 90],
+    qualities: [75, 85, 88, 90, 92],
   },
   turbopack: {
     rules: {
