@@ -50,11 +50,13 @@ export async function fetchServerCart(
 ): Promise<{ cartId: string; items: CartItem[] } | null> {
   try {
     // 1. Get or create cart row
-    let { data: cart, error: cartError } = await supabase
+    const { data: initialCart, error: cartError } = await supabase
       .from('carts')
       .select('id, currency')
       .eq('user_id', userId)
       .maybeSingle()
+
+    let cart = initialCart
 
     if (cartError) {
       console.warn('[CartSync] Failed to fetch cart row:', cartError.message)

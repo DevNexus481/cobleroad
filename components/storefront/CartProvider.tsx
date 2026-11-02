@@ -7,7 +7,6 @@ import {
   useEffect,
   useCallback,
   useRef,
-  useState,
   type ReactNode,
 } from 'react'
 import type { CartItem, CurrencyCode, ValidatedCart } from '@/types'

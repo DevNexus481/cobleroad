@@ -1,4 +1,4 @@
-import type { CartItem, ValidatedCart } from '@/types'
+import type { ValidatedCart } from '@/types'
 
 export async function fetchRemoteCart(): Promise<{
   cart: ValidatedCart | null

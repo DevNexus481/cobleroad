@@ -1,11 +1,10 @@
 import type { Metadata } from 'next'
-import { Suspense } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getPublishedProducts } from '@/lib/products/queries'
 import { REAL_PRODUCTS } from '@/lib/products/catalogue'
 import { formatAmount } from '@/lib/currency'
-import { Search as SearchIcon, ArrowRight } from 'lucide-react'
+import { Search as SearchIcon } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Search Catalogue — Cobleroad',
@@ -31,7 +30,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const params = await searchParams
   const query = (params.q ?? '').trim()
 
-  const { products, total } = await getPublishedProducts({
+  const { products } = await getPublishedProducts({
     search: query || undefined,
     currency: 'INR',
     limit: 24,

@@ -9,7 +9,7 @@ import { PersonalisationEditor } from './PersonalisationEditor'
 import { ProductAccordions } from './ProductAccordions'
 import { useCart } from './CartProvider'
 import { formatAmount } from '@/lib/currency'
-import type { Product, ProductVariant, PersonalisationFinish, PersonalisationConfig } from '@/types'
+import type { Product, ProductVariant, PersonalisationConfig } from '@/types'
 
 function generateId(): string {
   try {

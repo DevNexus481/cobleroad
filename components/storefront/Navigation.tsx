@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Menu, X, Search, ShoppingBag, User, Package } from 'lucide-react'
 import { useCart } from './CartProvider'
 import { QuickSearchModal } from './QuickSearchModal'
+import { ThemeToggle } from './ThemeToggle'
 
 const NAV_LINKS = [
   { href: '/shop', label: 'Shop' },
@@ -157,6 +158,9 @@ export function Navigation() {
               <Search size={18} strokeWidth={1.5} />
             </button>
 
+            {/* Dark / Light Mode Toggle */}
+            <ThemeToggle />
+
             <Link href="/account" className="nav-icon-btn" aria-label="My account" id="nav-account-btn">
               <User size={18} strokeWidth={1.5} />
             </Link>
@@ -219,15 +223,20 @@ export function Navigation() {
           ))}
         </nav>
 
-        <div className="mt-auto pt-8 flex gap-4">
-          <Link href="/account" className="nav-drawer-link" onClick={() => setDrawerOpen(false)}
-            style={{ border: 'none', padding: 0, fontSize: '0.8125rem', opacity: 0.6 }}>
-            Account
-          </Link>
-          <Link href="/search" className="nav-drawer-link" onClick={() => setDrawerOpen(false)}
-            style={{ border: 'none', padding: 0, fontSize: '0.8125rem', opacity: 0.6 }}>
-            Search
-          </Link>
+        <div className="mt-auto pt-6 flex flex-col gap-2">
+          {/* Mobile Theme Switcher */}
+          <ThemeToggle variant="row" />
+
+          <div className="flex gap-4 pt-2">
+            <Link href="/account" className="nav-drawer-link" onClick={() => setDrawerOpen(false)}
+              style={{ border: 'none', padding: 0, fontSize: '0.8125rem', opacity: 0.6 }}>
+              Account
+            </Link>
+            <Link href="/search" className="nav-drawer-link" onClick={() => setDrawerOpen(false)}
+              style={{ border: 'none', padding: 0, fontSize: '0.8125rem', opacity: 0.6 }}>
+              Search
+            </Link>
+          </div>
         </div>
       </div>
     </>

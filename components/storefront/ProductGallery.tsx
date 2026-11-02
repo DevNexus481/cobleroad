@@ -46,7 +46,6 @@ export function ProductGallery({
     },
   ]
 
-  const activeImage = safeImages[activeIndex] ?? safeImages[0]
   const hasInitials = Boolean(initials && initials.trim().length > 0 && isPersonalisable)
 
   return (

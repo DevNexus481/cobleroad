@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 170" width="600" height="170">
-  <g transform="translate(80, 85)">
-    <path d="M -22 -22 L 0 0 L 22 -32 L 4 14 Z" fill="#00839C"/>
-    <path d="M 0 0 L 22 14 L 14 32 Z" fill="#E86C20"/>
-  </g>
-  <text x="140" y="80" font-family="'Helvetica Neue', Arial, sans-serif" font-size="40" font-weight="300" letter-spacing="5" fill="#00657E">INDIA</text>
-  <text x="140" y="118" font-family="'Helvetica Neue', Arial, sans-serif" font-size="30" font-weight="bold" letter-spacing="3" fill="#00657E">LIV <tspan font-weight="300">GROUP</tspan></text>
-</svg>

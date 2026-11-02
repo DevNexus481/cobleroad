@@ -86,6 +86,119 @@
 }
 
 /* =============================================================================
+   DARK MODE — Warm Obsidian Atelier
+   Deep roasted espresso, aged leather cognac, brass, and parchment ivory
+   ============================================================================= */
+
+.dark {
+  /* --- Colour Palette --- */
+  --colour-ivory:        #1A130F;
+  --colour-paper:        #100A07;
+  --colour-parchment:    #241B15;
+  --colour-espresso:     #F7F4EE;
+  --colour-charcoal:     #D8CEBF;
+  --colour-cognac:       #B5784E;
+  --colour-cognac-light: #C98B60;
+  --colour-cognac-dark:  #8E5632;
+  --colour-olive:        #9CA17D;
+  --colour-olive-light:  #B5BA94;
+  --colour-brass:        #D4B224;
+  --colour-border:       #2E221B;
+  --colour-border-light: #241A14;
+  --colour-white:        #18110D;
+  --colour-black:        #FFFFFF;
+
+  /* --- Semantic Tokens --- */
+  --background: var(--colour-paper);
+  --foreground: var(--colour-espresso);
+  --card: var(--colour-ivory);
+  --card-foreground: var(--colour-espresso);
+  --popover: var(--colour-paper);
+  --popover-foreground: var(--colour-espresso);
+  --primary: var(--colour-espresso);
+  --primary-foreground: #100A07;
+  --secondary: var(--colour-parchment);
+  --secondary-foreground: var(--colour-espresso);
+  --muted: var(--colour-parchment);
+  --muted-foreground: var(--colour-charcoal);
+  --accent: var(--colour-parchment);
+  --accent-foreground: var(--colour-espresso);
+  --border: var(--colour-border);
+  --input: var(--colour-border);
+  --ring: var(--colour-cognac);
+
+  /* --- Shadows in dark mode --- */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
+}
+
+/* Dark Mode Component Specific Refinements */
+.dark .nav-root.scrolled {
+  background: rgba(16, 10, 7, 0.94);
+  border-bottom-color: rgba(46, 34, 27, 0.8);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+}
+
+.dark .product-card__image-wrap {
+  background-color: #17110D;
+  border-bottom-color: var(--colour-border-light);
+}
+
+.dark .announcement-bar {
+  background-color: #0E0805;
+  color: #F7F4EE;
+  border-bottom: 1px solid rgba(247, 244, 238, 0.08);
+}
+
+.dark .footer {
+  background-color: #0B0604;
+  color: var(--colour-espresso);
+  border-top: 1px solid rgba(247, 244, 238, 0.08);
+}
+
+.dark .trust-bar {
+  background-color: #140E0B;
+  border-color: var(--colour-border);
+}
+
+.dark .btn-primary {
+  background-color: #F7F4EE;
+  color: #100A07;
+  border-color: #F7F4EE;
+}
+
+.dark .btn-primary:hover {
+  background-color: var(--colour-cognac-light);
+  color: #100A07;
+  border-color: var(--colour-cognac-light);
+}
+
+.dark .btn-secondary {
+  border-color: var(--colour-border);
+  color: var(--colour-espresso);
+  background-color: transparent;
+}
+
+.dark .btn-secondary:hover {
+  background-color: var(--colour-parchment);
+  border-color: var(--colour-cognac);
+  color: var(--colour-espresso);
+}
+
+.dark .cart-stepper {
+  background-color: var(--colour-parchment);
+  border-color: var(--colour-border);
+}
+
+.dark .cart-drawer-panel,
+.dark .nav-drawer {
+  background-color: #140E0B;
+  border-color: var(--colour-border);
+  box-shadow: -8px 0 36px rgba(0, 0, 0, 0.6);
+}
+
+/* =============================================================================
    BASE RESET & DEFAULTS
    ============================================================================= */
 
@@ -2459,5 +2572,74 @@ button {
 
 .luxury-select-btn:hover {
   border-color: var(--colour-espresso);
+}
+
+/* =============================================================================
+   21ST ANIMATIONS & KINETIC TYPOGRAPHY
+   ============================================================================= */
+
+@keyframes marquee-left {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes marquee-right {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes shinyText {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes ambientBreathe {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.65;
+    transform: scale(1.04);
+  }
+}
+
+.animate-marquee-left {
+  animation: marquee-left 32s linear infinite;
+}
+
+.animate-marquee-right {
+  animation: marquee-right 32s linear infinite;
+}
+
+.animate-shiny-text {
+  animation: shinyText 4.5s linear infinite;
+}
+
+.animate-ambient-breathe {
+  animation: ambientBreathe 8s ease-in-out infinite;
+}
+
+/* Marquee Heritage Bar Styles */
+.heritage-marquee-bar {
+  background-color: #140A05;
+  border-top: 1px solid rgba(247, 244, 238, 0.12);
+  border-bottom: 1px solid rgba(247, 244, 238, 0.12);
+  padding: 0.875rem 0;
+  position: relative;
+  z-index: 5;
+  overflow: hidden;
 }
 

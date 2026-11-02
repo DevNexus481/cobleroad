@@ -4,6 +4,11 @@ import Link from 'next/link'
 import { ArrowRight, Truck, RefreshCw, Shield, Leaf } from 'lucide-react'
 import { ProductGridCard } from '@/components/storefront/ProductGridCard'
 import PerspectiveTunnelHero from '@/components/ui/perspective-tunnel-hero'
+import { FlipWords } from '@/components/ui/flip-words'
+import { AnimatedShinyBadge } from '@/components/ui/animated-shiny-badge'
+import { Marquee } from '@/components/ui/marquee'
+import { AmbientHeroSpotlight, SpotlightCard } from '@/components/ui/spotlight'
+import { ScrollReveal } from '@/components/ui/scroll-reveal'
 import { getPublishedProducts } from '@/lib/products/queries'
 import { FEATURED_PRODUCTS } from '@/lib/products/catalogue'
 
@@ -69,8 +74,6 @@ const TRUST_ITEMS = [
   },
 ]
 
-const HERO_SIDE_LINKS = ['Travel', 'Work', 'Life', 'Personalise']
-
 export default async function HomePage() {
   const { products: liveProducts } = await getPublishedProducts({ limit: 5 })
   const hasLive = liveProducts && liveProducts.length > 0
@@ -108,7 +111,7 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* ===== HERO ===== */}
+      {/* ===== HERO WITH 21ST FLIP-WORDS, SHINY BADGE & AMBIENT SPOTLIGHT ===== */}
       <section className="hero" aria-label="Hero">
         <div className="hero__bg" aria-hidden="true">
           <Image
@@ -123,16 +126,39 @@ export default async function HomePage() {
         </div>
         <div className="hero__overlay" aria-hidden="true" />
 
+        {/* 21st Ambient Interactive Spotlight */}
+        <AmbientHeroSpotlight />
+
         {/* Content */}
         <div className="container-site hero__content" style={{ paddingTop: '3.5rem', paddingBottom: '5.5rem', zIndex: 2 }}>
-          <span className="hero__eyebrow">Leather Since Ages.</span>
+          <div style={{ marginBottom: '1rem' }}>
+            <AnimatedShinyBadge
+              text="Artisanal Leather Atelier"
+              subtext="Handcrafted in India"
+              href="/our-story"
+            />
+          </div>
+
           <h1 className="hero__title">
             Made to Carry<br />
-            <span className="hero__title-accent">a Lifetime.</span>
+            <span className="hero__title-accent">
+              <FlipWords
+                words={[
+                  'a Lifetime.',
+                  'Your Legacy.',
+                  'Every Journey.',
+                  'Quiet Luxury.',
+                  'Pure Craft.',
+                ]}
+                duration={3400}
+              />
+            </span>
           </h1>
+
           <p className="hero__body">
             Timeless leather goods for a more meaningful journey.
           </p>
+
           <div className="hero__actions">
             <Link
               href="/shop"
@@ -186,191 +212,216 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ===== SHOP BY CATEGORY ===== */}
-      <section className="category-row" aria-labelledby="category-heading">
-        <div className="category-row__header">
-          <div className="category-row__label-block">
-            <span className="category-row__label">Shop by Category</span>
-            <h2 className="category-row__title" id="category-heading">
-              Objects for<br />Every Journey.
-            </h2>
-            <p className="category-row__subtitle">Crafted to age with you.</p>
-          </div>
-        </div>
-        <div className="category-row__scroll" role="list">
-          {CATEGORY_TILES.map((cat) => (
-            <Link
-              key={`${cat.slug}-${cat.name}`}
-              href={`/collections/${cat.slug}`}
-              className="category-tile"
-              role="listitem"
-              aria-label={`Shop ${cat.name}`}
-            >
-              <div className="category-tile__image-wrap">
-                <Image
-                  src={cat.image}
-                  alt={cat.name}
-                  fill
-                  sizes="220px"
-                  style={{ objectFit: 'cover' }}
-                />
-              </div>
-              <span className="category-tile__name">{cat.name}</span>
-              <span className="category-tile__arrow">→</span>
-            </Link>
-          ))}
-        </div>
+      {/* ===== HERITAGE INFINITE MARQUEE (21ST) ===== */}
+      <section className="heritage-marquee-bar" aria-label="Brand credentials ticker">
+        <Marquee
+          items={[
+            'Full-Grain Vegetable Tanned Leather',
+            'Solid Brass Hardware',
+            'Hand-Stitched Integrity',
+            'Complimentary Bespoke Monogramming',
+            '14-Day Home Trial',
+            'Lifetime Craftsmanship Guarantee',
+            'Ethically Sourced in India',
+            'Zero Synthetic Fillers',
+          ]}
+          speed={32}
+        />
       </section>
+
+      {/* ===== SHOP BY CATEGORY ===== */}
+      <ScrollReveal yOffset={28}>
+        <section className="category-row" aria-labelledby="category-heading">
+          <div className="category-row__header">
+            <div className="category-row__label-block">
+              <span className="category-row__label">Shop by Category</span>
+              <h2 className="category-row__title" id="category-heading">
+                Objects for<br />Every Journey.
+              </h2>
+              <p className="category-row__subtitle">Crafted to age with you.</p>
+            </div>
+          </div>
+          <div className="category-row__scroll" role="list">
+            {CATEGORY_TILES.map((cat) => (
+              <Link
+                key={`${cat.slug}-${cat.name}`}
+                href={`/collections/${cat.slug}`}
+                className="category-tile"
+                role="listitem"
+                aria-label={`Shop ${cat.name}`}
+              >
+                <div className="category-tile__image-wrap">
+                  <Image
+                    src={cat.image}
+                    alt={cat.name}
+                    fill
+                    sizes="220px"
+                    style={{ objectFit: 'cover' }}
+                  />
+                </div>
+                <span className="category-tile__name">{cat.name}</span>
+                <span className="category-tile__arrow">→</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      </ScrollReveal>
 
       {/* ===== CRAFT DARK SECTION ===== */}
-      <section className="craft-dark" aria-labelledby="craft-heading">
-        {/* Left: artisan image */}
-        <div className="craft-dark__image-half">
-          <Image
-            src="/images/lifestyle/lifestyle-desk.jpg"
-            alt="Artisan crafting leather goods by hand"
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            style={{ objectFit: 'cover' }}
-            quality={88}
-          />
-          <div className="craft-dark__play-btn">
-            <span className="craft-dark__play-icon" aria-hidden="true">
-              <svg width="10" height="12" viewBox="0 0 10 12" fill="currentColor">
-                <path d="M0 0L10 6L0 12V0Z" />
-              </svg>
-            </span>
-            <span>The Craft<br />In Every Stitch</span>
+      <ScrollReveal yOffset={32}>
+        <section className="craft-dark" aria-labelledby="craft-heading">
+          {/* Left: artisan image */}
+          <div className="craft-dark__image-half">
+            <Image
+              src="/images/lifestyle/lifestyle-desk.jpg"
+              alt="Artisan crafting leather goods by hand"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              style={{ objectFit: 'cover' }}
+              quality={88}
+            />
+            <div className="craft-dark__play-btn">
+              <span className="craft-dark__play-icon" aria-hidden="true">
+                <svg width="10" height="12" viewBox="0 0 10 12" fill="currentColor">
+                  <path d="M0 0L10 6L0 12V0Z" />
+                </svg>
+              </span>
+              <span>The Craft<br />In Every Stitch</span>
+            </div>
           </div>
-        </div>
 
-        {/* Right: content */}
-        <div className="craft-dark__content">
-          <span className="craft-dark__label">The Craft</span>
-          <h2 className="craft-dark__title" id="craft-heading">
-            More than a Bag.<br />
-            A Story in Leather.
-          </h2>
-          <p className="craft-dark__body">
-            Full-grain leather. Thoughtful design. Skilled hands. Every detail is
-            crafted to age beautifully, travelling with you for years to come.
-          </p>
-          <Link href="/our-story" className="craft-dark__cta">
-            Discover Our Craft <ArrowRight size={13} />
-          </Link>
-
-          {/* 3 detail thumbnails */}
-          <div className="craft-dark__details">
-            {[
-              { img: '/images/products/real/unfold-laptop-bag/unfold-laptop-bag-04.png', label: 'Full-Grain\nLeather' },
-              { img: '/images/products/real/optimus-transformer-bag/optimus-transformer-bag-01.png', label: 'Solid Brass\nHardware' },
-              { img: '/images/products/real/shoe-compartment-duffle/shoe-compartment-duffle-06.png', label: 'Hand-Finished\nDetails' },
-            ].map((d) => (
-              <div key={d.label} className="craft-detail-thumb">
-                <Image
-                  src={d.img}
-                  alt={d.label.replace('\n', ' ')}
-                  width={120}
-                  height={120}
-                  className="craft-detail-thumb__image"
-                  style={{ objectFit: 'cover' }}
-                />
-                <span className="craft-detail-thumb__label" style={{ whiteSpace: 'pre-line' }}>{d.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== EDITORIAL BENTO GRID ===== */}
-      <section className="editorial-bento" aria-label="Editorial collection">
-        {/* Tile 1 */}
-        <div className="bento-tile">
-          <div className="bento-tile__bg" aria-hidden="true">
-            <Image src="/images/products/real/weekender-duffle/weekender-duffle-17.png" alt="" fill sizes="33vw" style={{ objectFit: 'cover' }} />
-          </div>
-          <div className="bento-tile__content">
-            <span className="bento-tile__eyebrow">The Craft</span>
-            <h3 className="bento-tile__title">
-              Handed Down.<br />
-              <em>Carried Forward.</em>
-            </h3>
-            <Link href="/our-story" className="bento-tile__cta">
-              See the Craft <ArrowRight size={11} />
+          {/* Right: content */}
+          <div className="craft-dark__content">
+            <span className="craft-dark__label">The Craft</span>
+            <h2 className="craft-dark__title" id="craft-heading">
+              More than a Bag.<br />
+              A Story in Leather.
+            </h2>
+            <p className="craft-dark__body">
+              Full-grain leather. Thoughtful design. Skilled hands. Every detail is
+              crafted to age beautifully, travelling with you for years to come.
+            </p>
+            <Link href="/our-story" className="craft-dark__cta">
+              Discover Our Craft <ArrowRight size={13} />
             </Link>
-          </div>
-        </div>
 
-        {/* Tile 2 */}
-        <div className="bento-tile">
-          <div className="bento-tile__bg" aria-hidden="true">
-            <Image src="/images/products/real/barrel-gym-bag/barrel-gym-bag-09.png" alt="" fill sizes="33vw" style={{ objectFit: 'cover' }} />
+            {/* 3 detail thumbnails */}
+            <div className="craft-dark__details">
+              {[
+                { img: '/images/products/real/unfold-laptop-bag/unfold-laptop-bag-04.png', label: 'Full-Grain\nLeather' },
+                { img: '/images/products/real/optimus-transformer-bag/optimus-transformer-bag-01.png', label: 'Solid Brass\nHardware' },
+                { img: '/images/products/real/shoe-compartment-duffle/shoe-compartment-duffle-06.png', label: 'Hand-Finished\nDetails' },
+              ].map((d) => (
+                <div key={d.label} className="craft-detail-thumb">
+                  <Image
+                    src={d.img}
+                    alt={d.label.replace('\n', ' ')}
+                    width={120}
+                    height={120}
+                    className="craft-detail-thumb__image"
+                    style={{ objectFit: 'cover' }}
+                  />
+                  <span className="craft-detail-thumb__label" style={{ whiteSpace: 'pre-line' }}>{d.label}</span>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="bento-tile__content">
-            <span className="bento-tile__eyebrow">A Modern Classic</span>
-            <h3 className="bento-tile__title">
-              For Those Who<br />
-              <em>Move Differently.</em>
-            </h3>
-            <Link href="/collections/everyday-bags" className="bento-tile__cta">
-              Shop Bags <ArrowRight size={11} />
-            </Link>
-          </div>
-        </div>
+        </section>
+      </ScrollReveal>
 
-        {/* Tile 3 */}
-        <div className="bento-tile">
-          <div className="bento-tile__bg" aria-hidden="true">
-            <Image src="/images/products/real/inappreciable-tote/inappreciable-tote-07.png" alt="" fill sizes="33vw" style={{ objectFit: 'cover' }} />
-          </div>
-          <div className="bento-tile__content">
-            <span className="bento-tile__eyebrow">Complimentary</span>
-            <h3 className="bento-tile__title">
-              Make It<br />
-              <em>Yours.</em>
-            </h3>
-            <Link href="/personalisation" className="bento-tile__cta">
-              Add Monogram <ArrowRight size={11} />
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* ===== EDITORIAL BENTO GRID WITH 21ST SPOTLIGHT CARDS ===== */}
+      <ScrollReveal yOffset={32}>
+        <section className="editorial-bento" aria-label="Editorial collection">
+          {/* Tile 1 */}
+          <SpotlightCard className="bento-tile" spotlightColor="rgba(181, 120, 78, 0.22)">
+            <div className="bento-tile__bg" aria-hidden="true">
+              <Image src="/images/products/real/weekender-duffle/weekender-duffle-17.png" alt="" fill sizes="33vw" style={{ objectFit: 'cover' }} />
+            </div>
+            <div className="bento-tile__content">
+              <span className="bento-tile__eyebrow">The Craft</span>
+              <h3 className="bento-tile__title">
+                Handed Down.<br />
+                <em>Carried Forward.</em>
+              </h3>
+              <Link href="/our-story" className="bento-tile__cta">
+                See the Craft <ArrowRight size={11} />
+              </Link>
+            </div>
+          </SpotlightCard>
+
+          {/* Tile 2 */}
+          <SpotlightCard className="bento-tile" spotlightColor="rgba(181, 120, 78, 0.22)">
+            <div className="bento-tile__bg" aria-hidden="true">
+              <Image src="/images/products/real/barrel-gym-bag/barrel-gym-bag-09.png" alt="" fill sizes="33vw" style={{ objectFit: 'cover' }} />
+            </div>
+            <div className="bento-tile__content">
+              <span className="bento-tile__eyebrow">A Modern Classic</span>
+              <h3 className="bento-tile__title">
+                For Those Who<br />
+                <em>Move Differently.</em>
+              </h3>
+              <Link href="/collections/everyday-bags" className="bento-tile__cta">
+                Shop Bags <ArrowRight size={11} />
+              </Link>
+            </div>
+          </SpotlightCard>
+
+          {/* Tile 3 */}
+          <SpotlightCard className="bento-tile" spotlightColor="rgba(181, 120, 78, 0.22)">
+            <div className="bento-tile__bg" aria-hidden="true">
+              <Image src="/images/products/real/inappreciable-tote/inappreciable-tote-07.png" alt="" fill sizes="33vw" style={{ objectFit: 'cover' }} />
+            </div>
+            <div className="bento-tile__content">
+              <span className="bento-tile__eyebrow">Complimentary</span>
+              <h3 className="bento-tile__title">
+                Make It<br />
+                <em>Yours.</em>
+              </h3>
+              <Link href="/personalisation" className="bento-tile__cta">
+                Add Monogram <ArrowRight size={11} />
+              </Link>
+            </div>
+          </SpotlightCard>
+        </section>
+      </ScrollReveal>
 
       {/* ===== THE ESSENTIALS ===== */}
-      <section className="essentials-section" aria-labelledby="essentials-heading">
-        <div className="essentials-inner">
-          {/* Label col */}
-          <div className="essentials-label-col">
-            <span className="essentials-label">Featured Products</span>
-            <h2 className="essentials-title" id="essentials-heading">
-              The<br />Essentials
-            </h2>
-            <p className="essentials-subtitle">Objects made to stay.</p>
-            <Link href="/shop" className="btn btn-secondary btn-sm" style={{ marginTop: '1.5rem' }}>
-              View All <ArrowRight size={13} />
-            </Link>
-          </div>
+      <ScrollReveal yOffset={32}>
+        <section className="essentials-section" aria-labelledby="essentials-heading">
+          <div className="essentials-inner">
+            {/* Label col */}
+            <div className="essentials-label-col">
+              <span className="essentials-label">Featured Products</span>
+              <h2 className="essentials-title" id="essentials-heading">
+                The<br />Essentials
+              </h2>
+              <p className="essentials-subtitle">Objects made to stay.</p>
+              <Link href="/shop" className="btn btn-secondary btn-sm" style={{ marginTop: '1.5rem' }}>
+                View All <ArrowRight size={13} />
+              </Link>
+            </div>
 
-          {/* Scrollable product cards */}
-          <div className="essentials-scroll">
-            {featuredItems.map((product) => (
-              <div key={product.slug} style={{ flex: '0 0 auto', width: '220px' }}>
-                <ProductGridCard
-                  id={product.id}
-                  slug={product.slug}
-                  name={product.name}
-                  shortDescription={product.desc}
-                  isFeatured={product.isNew}
-                  isDemo={product.isDemo}
-                  personalisable={product.personalisable}
-                  primaryImage={product.primaryImage}
-                  variants={product.variants}
-                />
-              </div>
-            ))}
+            {/* Scrollable product cards */}
+            <div className="essentials-scroll">
+              {featuredItems.map((product) => (
+                <div key={product.slug} style={{ flex: '0 0 auto', width: '220px' }}>
+                  <ProductGridCard
+                    id={product.id}
+                    slug={product.slug}
+                    name={product.name}
+                    shortDescription={product.desc}
+                    isFeatured={product.isNew}
+                    isDemo={product.isDemo}
+                    personalisable={product.personalisable}
+                    primaryImage={product.primaryImage}
+                    variants={product.variants}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </ScrollReveal>
 
       {/* ===== 3D PERSPECTIVE TUNNEL ===== */}
       <PerspectiveTunnelHero />

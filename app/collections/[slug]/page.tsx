@@ -1,9 +1,8 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import Image from 'next/image'
 import { getCollectionWithProducts } from '@/lib/products/queries'
-import { REAL_PRODUCTS, getProductsByCollection } from '@/lib/products/catalogue'
+import { getProductsByCollection } from '@/lib/products/catalogue'
 import { ArrowLeft } from 'lucide-react'
 import { ProductGridCard } from '@/components/storefront/ProductGridCard'
 

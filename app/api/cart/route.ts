@@ -13,7 +13,7 @@ import {
 } from '@/lib/cart/service'
 
 function getOrCreateGuestSessionId(cookieStore: any): { sessionId: string; isNew: boolean } {
-  let cookieVal = cookieStore.get(CART_CONFIG.GUEST_COOKIE_NAME)?.value
+  const cookieVal = cookieStore.get(CART_CONFIG.GUEST_COOKIE_NAME)?.value
   if (cookieVal && isValidUuid(cookieVal)) {
     return { sessionId: cookieVal, isNew: false }
   }
@@ -21,7 +21,7 @@ function getOrCreateGuestSessionId(cookieStore: any): { sessionId: string; isNew
   return { sessionId: newId, isNew: true }
 }
 
-export async function GET(req: NextRequest) {
+export async function GET(_req: NextRequest) {
   try {
     const cookieStore = await cookies()
     const { sessionId, isNew } = getOrCreateGuestSessionId(cookieStore)

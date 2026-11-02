@@ -1,9 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import Image from 'next/image'
-import Link from 'next/link'
 import { getProductBySlug } from '@/lib/products/queries'
-import { formatAmount } from '@/lib/currency'
 import { ProductDetailInteractive } from '@/components/storefront/ProductDetailInteractive'
 import { PRODUCT_BY_SLUG } from '@/lib/products/catalogue'
 

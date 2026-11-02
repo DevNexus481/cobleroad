@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Sparkles, X, Check, Info } from 'lucide-react'
-import type { PersonalisationConfig, PersonalisationFinish } from '@/types'
+import { Sparkles, X, Check } from 'lucide-react'
+import type { PersonalisationConfig } from '@/types'
 
 interface PersonalisationEditorProps {
   config: PersonalisationConfig | null

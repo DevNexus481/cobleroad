@@ -53,25 +53,34 @@ export const viewport: Viewport = {
   initialScale: 1,
 }
 
+import { ThemeProvider } from '@/components/theme/ThemeProvider'
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
-    <html lang="en-IN" data-scroll-behavior="smooth">
+    <html lang="en-IN" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body>
-        <CartProvider>
-          <Navigation />
-          <main id="main-content">{children}</main>
-          <Footer />
-          <CartDrawer />
-          <AdminToolbar />
-        </CartProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange={false}
+        >
+          <CartProvider>
+            <Navigation />
+            <main id="main-content">{children}</main>
+            <Footer />
+            <CartDrawer />
+            <AdminToolbar />
+          </CartProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

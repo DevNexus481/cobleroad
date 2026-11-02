@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Plus, Check, ShoppingBag, Sparkles } from 'lucide-react'
+import { Check, ShoppingBag, Sparkles } from 'lucide-react'
 import { useCart } from './CartProvider'
 import { formatAmount } from '@/lib/currency'
 import type { CurrencyCode } from '@/types'

@@ -212,7 +212,7 @@ export function ProductAccordions({
         </div>
       ),
     },
-  ]
+  ].filter((sec) => sec.id !== 'personalisation' || personalisable)
 
   return (
     <div className="luxury-accordion">

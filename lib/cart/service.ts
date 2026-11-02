@@ -9,12 +9,10 @@
 // =============================================================================
 
 import type { SupabaseClient } from '@supabase/supabase-js'
-import { createAdminClient } from '@/lib/supabase/server'
 import type {
   CartItem,
   CartPersonalisation,
   CurrencyCode,
-  Money,
   ValidatedCart,
 } from '@/types'
 
@@ -96,7 +94,7 @@ export async function getOrCreateCartRow(
 
   // 1. Authenticated User Cart
   if (context.userId && isValidUuid(context.userId)) {
-    const { data: existing, error: selectErr } = await supabase
+    const { data: existing } = await supabase
       .from('carts')
       .select('id, currency')
       .eq('user_id', context.userId)
