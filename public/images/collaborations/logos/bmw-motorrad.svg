@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 180" width="650" height="180">
+  <g transform="translate(90, 90)">
+    <circle cx="0" cy="0" r="68" fill="#1C1C1C" stroke="#888888" stroke-width="2"/>
+    <circle cx="0" cy="0" r="44" fill="#FFFFFF"/>
+    <path d="M 0 0 L 0 -44 A 44 44 0 0 1 44 0 Z" fill="#0066B1"/>
+    <path d="M 0 0 L 0 44 A 44 44 0 0 1 -44 0 Z" fill="#0066B1"/>
+    <path d="M 0 0 L -44 0 A 44 44 0 0 1 0 -44 Z" fill="#FFFFFF"/>
+    <path d="M 0 0 L 44 0 A 44 44 0 0 1 0 44 Z" fill="#FFFFFF"/>
+    <circle cx="0" cy="0" r="44" fill="none" stroke="#666666" stroke-width="1"/>
+    <text x="-23" y="-48" font-family="'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="bold" fill="#FFFFFF" text-anchor="middle">B</text>
+    <text x="0" y="-54" font-family="'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="bold" fill="#FFFFFF" text-anchor="middle">M</text>
+    <text x="23" y="-48" font-family="'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="bold" fill="#FFFFFF" text-anchor="middle">W</text>
+  </g>
+  <text x="195" y="82" font-family="'Helvetica Neue', Arial, sans-serif" font-size="44" font-weight="900" letter-spacing="1" fill="#111111">BMW</text>
+  <text x="195" y="128" font-family="'Helvetica Neue', Arial, sans-serif" font-size="34" font-weight="800" letter-spacing="3" fill="#111111">MOTORRAD</text>
+</svg>
