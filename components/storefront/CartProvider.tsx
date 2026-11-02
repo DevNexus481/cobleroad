@@ -19,6 +19,7 @@ import {
   clearRemoteCart,
   mergeGuestCartServer,
 } from '@/lib/cart/client'
+import { calculateProductPrice } from '@/lib/currency'
 
 // =============================================================================
 // Cart State
@@ -251,6 +252,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   // 1. Instant local hydration on client mount
   useEffect(() => {
     try {
+      // Check detected or selected currency from cookie
+      const cookieMatch = typeof document !== 'undefined' ? document.cookie.match(/cobleroad_currency=([^;]+)/) : null
+      const cookieCurrency = (cookieMatch?.[1] as CurrencyCode) || null
+
       const stored = localStorage.getItem(CART_STORAGE_KEY)
       if (stored) {
         const parsed = JSON.parse(stored)
@@ -258,10 +263,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
         dispatch({
           type: 'HYDRATE',
           items: rawItems,
-          currency: parsed?.currency || 'INR',
+          currency: cookieCurrency || parsed?.currency || 'INR',
         })
       } else {
-        dispatch({ type: 'HYDRATE', items: [], currency: 'INR' })
+        dispatch({ type: 'HYDRATE', items: [], currency: cookieCurrency || 'INR' })
       }
     } catch {
       dispatch({ type: 'HYDRATE', items: [], currency: 'INR' })
@@ -351,7 +356,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const subtotalMinor = state.items.reduce((sum, i) => {
     if (i.is_available === false) return sum
-    const price = i.current_price?.amountMinor ?? i.price_snapshot?.amountMinor ?? 0
+    let price = i.current_price?.amountMinor ?? i.price_snapshot?.amountMinor ?? 0
+    const itemCurrency = i.current_price?.currency ?? i.price_snapshot?.currency ?? 'INR'
+    if (itemCurrency !== state.currency) {
+      if (itemCurrency === 'INR' && state.currency === 'USD') {
+        price = calculateProductPrice(price, 'USD')
+      } else if (itemCurrency === 'USD' && state.currency === 'INR') {
+        price = Math.round(((price / 100) / 2) * 85) * 100
+      }
+    }
     return sum + (Number.isFinite(price) ? price : 0) * (i.quantity || 1)
   }, 0)
 
@@ -405,7 +418,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const closeCart = useCallback(() => dispatch({ type: 'CLOSE_DRAWER' }), [])
   const toggleCart = useCallback(() => dispatch({ type: 'TOGGLE_DRAWER' }), [])
   const setCurrency = useCallback(
-    (currency: CurrencyCode) => dispatch({ type: 'SET_CURRENCY', currency }),
+    (currency: CurrencyCode) => {
+      dispatch({ type: 'SET_CURRENCY', currency })
+      try {
+        if (typeof document !== 'undefined') {
+          document.cookie = `cobleroad_currency=${currency}; path=/; max-age=31536000; SameSite=Lax`
+          document.cookie = `cobleroad_market=${currency === 'USD' ? 'INTL' : 'IN'}; path=/; max-age=31536000; SameSite=Lax`
+        }
+      } catch {
+        // Ignore cookie errors
+      }
+    },
     []
   )
   const dismissWarnings = useCallback(() => dispatch({ type: 'DISMISS_WARNINGS' }), [])

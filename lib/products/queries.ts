@@ -6,6 +6,7 @@
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/server'
 import type { ProductCard, Product, Collection, CurrencyCode } from '@/types'
 import { isValidUUID, getFallbackVariant } from '@/lib/products/fallback-data'
+import { calculateProductPrice } from '@/lib/currency'
 
 /**
  * Fetch all published products for the shop page.
@@ -239,15 +240,21 @@ export async function verifyProductPrice(
       const supabase = await createClient()
       const { data } = await supabase
         .from('product_prices')
-        .select('amount_minor, product_id, product_variants!inner(product_id, products!inner(status))')
+        .select('amount_minor, product_id, currency, product_variants!inner(product_id, products!inner(status))')
         .eq('variant_id', variantId)
-        .eq('currency', currency)
-        .single()
 
-      if (data) {
-        const productStatus = (data as any).product_variants?.products?.status
+      if (data && data.length > 0) {
+        const productStatus = (data[0] as any).product_variants?.products?.status
         if (productStatus === 'published') {
-          return { amountMinor: data.amount_minor, productId: data.product_id }
+          const exactPrice = (data as any[]).find((p) => p.currency === currency)
+          if (exactPrice) {
+            return { amountMinor: exactPrice.amount_minor, productId: exactPrice.product_id }
+          }
+          const inrPrice = (data as any[]).find((p) => p.currency === 'INR') || data[0]
+          return {
+            amountMinor: calculateProductPrice(inrPrice.amount_minor, currency),
+            productId: inrPrice.product_id,
+          }
         }
       }
     } catch {
@@ -258,7 +265,8 @@ export async function verifyProductPrice(
   // Fallback to verified catalog for demo / development
   const fallback = getFallbackVariant(variantId)
   if (fallback) {
-    return { amountMinor: fallback.amountMinor, productId: fallback.productId }
+    const amountMinor = calculateProductPrice(fallback.amountMinor, currency)
+    return { amountMinor, productId: fallback.productId }
   }
 
   return null

@@ -8,10 +8,27 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Lock, CreditCard, MapPin, ChevronRight, AlertTriangle } from 'lucide-react'
 import { useCart } from '@/components/storefront/CartProvider'
-import { formatAmount } from '@/lib/currency'
+import { formatAmount, calculateProductPrice } from '@/lib/currency'
 import { ShippingAddressSchema } from '@/lib/validation'
+import type { CurrencyCode } from '@/types'
 
 type CheckoutFormData = z.infer<typeof ShippingAddressSchema>
+
+const SUPPORTED_COUNTRIES = [
+  { code: 'IN', name: 'India (Domestic)', currency: 'INR' as const },
+  { code: 'US', name: 'United States (USD)', currency: 'USD' as const },
+  { code: 'GB', name: 'United Kingdom (USD)', currency: 'USD' as const },
+  { code: 'CA', name: 'Canada (USD)', currency: 'USD' as const },
+  { code: 'AU', name: 'Australia (USD)', currency: 'USD' as const },
+  { code: 'AE', name: 'United Arab Emirates (USD)', currency: 'USD' as const },
+  { code: 'SG', name: 'Singapore (USD)', currency: 'USD' as const },
+  { code: 'DE', name: 'Germany (USD)', currency: 'USD' as const },
+  { code: 'FR', name: 'France (USD)', currency: 'USD' as const },
+  { code: 'IT', name: 'Italy (USD)', currency: 'USD' as const },
+  { code: 'CH', name: 'Switzerland (USD)', currency: 'USD' as const },
+  { code: 'NL', name: 'Netherlands (USD)', currency: 'USD' as const },
+  { code: 'JP', name: 'Japan (USD)', currency: 'USD' as const },
+]
 
 const INDIAN_STATES = [
   'Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chhattisgarh','Goa','Gujarat',
@@ -38,19 +55,37 @@ export default function CheckoutPage() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
     getValues,
   } = useForm<CheckoutFormData>({
     resolver: zodResolver(ShippingAddressSchema),
-    defaultValues: { country: 'IN' },
+    defaultValues: { country: currency === 'USD' ? 'US' : 'IN' },
   })
+
+  const selectedCountry = watch('country') || (currency === 'USD' ? 'US' : 'IN')
+  const isInternational = selectedCountry !== 'IN'
+  const effectiveCurrency: CurrencyCode = isInternational ? 'USD' : (currency === 'USD' ? 'USD' : 'INR')
 
   const isRazorpayConfigured = !!(process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID && 
     !process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID?.includes('your_key_id'))
 
-  const shippingThresholdMinor = 299900
-  const shippingMinor = subtotalMinor >= shippingThresholdMinor ? 0 : 15000
-  const totalMinor = subtotalMinor + shippingMinor
+  // Calculate subtotal in effective currency
+  const effectiveSubtotalMinor = items.reduce((sum, item) => {
+    let price = item.price_snapshot.amountMinor
+    if (item.price_snapshot.currency !== effectiveCurrency) {
+      if (item.price_snapshot.currency === 'INR' && effectiveCurrency === 'USD') {
+        price = calculateProductPrice(price, 'USD')
+      } else if (item.price_snapshot.currency === 'USD' && effectiveCurrency === 'INR') {
+        price = Math.round(((price / 100) / 2) * 85) * 100
+      }
+    }
+    return sum + price * item.quantity
+  }, 0)
+
+  const shippingThresholdMinor = isInternational ? 20000 : 299900 // $200 or ₹2,999
+  const shippingMinor = effectiveSubtotalMinor >= shippingThresholdMinor ? 0 : (isInternational ? 2500 : 15000)
+  const totalMinor = effectiveSubtotalMinor + shippingMinor
 
   if (!isHydrated) {
     return (
@@ -92,10 +127,13 @@ export default function CheckoutPage() {
             product_id: i.product_id,
             variant_id: i.variant_id,
             quantity: i.quantity,
-            personalisation_text: i.personalisation?.text,
+            personalisation_text: i.personalisation?.text || undefined,
           })),
-          shipping_address: data,
-          currency: 'INR',
+          shipping_address: {
+            ...data,
+            country: data.country || selectedCountry,
+          },
+          currency: effectiveCurrency,
         }),
       })
 
@@ -269,26 +307,36 @@ export default function CheckoutPage() {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="state" className="form-label">State *</label>
-                  <select id="state" {...register('state')} className="form-select" autoComplete="address-level1">
-                    <option value="">Select state</option>
-                    {INDIAN_STATES.map((s) => <option key={s} value={s}>{s}</option>)}
+                  <label htmlFor="country" className="form-label">Country *</label>
+                  <select id="country" {...register('country')} className="form-select" autoComplete="country">
+                    {SUPPORTED_COUNTRIES.map((c) => (
+                      <option key={c.code} value={c.code}>{c.name}</option>
+                    ))}
                   </select>
+                  {isInternational && (
+                    <p style={{ fontSize: '0.75rem', color: 'var(--colour-cognac)', marginTop: '0.25rem', fontWeight: 500 }}>
+                      ✈ International delivery via DHL Express with all import duties included.
+                    </p>
+                  )}
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="state" className="form-label">{selectedCountry === 'IN' ? 'State *' : 'State / Province *'}</label>
+                  {selectedCountry === 'IN' ? (
+                    <select id="state" {...register('state')} className="form-select" autoComplete="address-level1">
+                      <option value="">Select state</option>
+                      {INDIAN_STATES.map((s) => <option key={s} value={s}>{s}</option>)}
+                    </select>
+                  ) : (
+                    <input id="state" {...register('state')} className="form-input" placeholder="State / Province / Region" autoComplete="address-level1" />
+                  )}
                   {errors.state && <p className="form-error">{errors.state.message}</p>}
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="postal_code" className="form-label">PIN Code *</label>
-                  <input id="postal_code" {...register('postal_code')} className="form-input" placeholder="400001" autoComplete="postal-code" maxLength={6} />
+                  <label htmlFor="postal_code" className="form-label">{selectedCountry === 'IN' ? 'PIN Code *' : 'Postal / ZIP Code *'}</label>
+                  <input id="postal_code" {...register('postal_code')} className="form-input" placeholder={selectedCountry === 'IN' ? '400001' : '10001'} autoComplete="postal-code" maxLength={selectedCountry === 'IN' ? 6 : 12} />
                   {errors.postal_code && <p className="form-error">{errors.postal_code.message}</p>}
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="country" className="form-label">Country</label>
-                  <select id="country" {...register('country')} className="form-select" autoComplete="country" disabled>
-                    <option value="IN">India (INR)</option>
-                  </select>
-                  <p style={{ fontSize: '0.75rem', opacity: 0.45, marginTop: '0.25rem' }}>International shipping coming soon.</p>
                 </div>
               </div>
 
@@ -345,16 +393,16 @@ export default function CheckoutPage() {
 
             <div style={{ borderTop: '1px solid var(--colour-border)', paddingTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.875rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>Subtotal</span><span>{formatAmount(subtotalMinor, currency)}</span>
+                <span>Subtotal</span><span>{formatAmount(effectiveSubtotalMinor, effectiveCurrency)}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>Shipping</span>
+                <span>Shipping ({isInternational ? 'DHL Express' : 'Domestic'})</span>
                 <span style={{ color: shippingMinor === 0 ? 'var(--colour-olive)' : 'inherit', fontWeight: shippingMinor === 0 ? 500 : 400 }}>
-                  {shippingMinor === 0 ? 'Free' : formatAmount(shippingMinor, currency)}
+                  {shippingMinor === 0 ? 'Free' : formatAmount(shippingMinor, effectiveCurrency)}
                 </span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 600, fontSize: '1rem', borderTop: '1px solid var(--colour-border)', paddingTop: '0.75rem', marginTop: '0.25rem' }}>
-                <span>Total</span><span>{formatAmount(totalMinor, currency)}</span>
+                <span>Total</span><span>{formatAmount(totalMinor, effectiveCurrency)}</span>
               </div>
             </div>
           </div>

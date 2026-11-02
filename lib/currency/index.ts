@@ -23,8 +23,9 @@ export function formatMoney(money: Money): string {
   const config = getCurrencyConfig(money.currency)
   const divisor = Math.pow(10, config.minorUnitPrecision)
   const amount = money.amountMinor / divisor
+  const locale = money.currency === 'USD' ? 'en-US' : 'en-IN'
 
-  return new Intl.NumberFormat('en-IN', {
+  return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: money.currency,
     minimumFractionDigits: config.minorUnitPrecision,
@@ -37,6 +38,30 @@ export function formatMoney(money: Money): string {
  */
 export function formatAmount(amountMinor: number, currency: CurrencyCode): string {
   return formatMoney({ amountMinor, currency })
+}
+
+/**
+ * Calculate the product price for a given currency.
+ * For INR: returns base INR price in paise.
+ * For USD: converts base INR to USD at standard conversion rate (1 USD = 85 INR),
+ * doubles it (2x for international luxury export tier with DDP/DHL),
+ * and rounds cleanly to clean luxury 5-dollar multiples in cents (e.g., $425.00).
+ */
+export function calculateProductPrice(baseInrMinor: number, currency: CurrencyCode): number {
+  if (currency === 'INR' || !baseInrMinor) {
+    return baseInrMinor
+  }
+
+  if (currency === 'USD') {
+    const FX_RATE = 85
+    const baseInr = baseInrMinor / 100 // rupees
+    const baseUsd = baseInr / FX_RATE // USD
+    const doubledUsd = baseUsd * 2 // 2x international pricing
+    const roundedUsd = Math.max(1, Math.ceil(doubledUsd / 5) * 5)
+    return roundedUsd * 100 // cents
+  }
+
+  return baseInrMinor
 }
 
 /**

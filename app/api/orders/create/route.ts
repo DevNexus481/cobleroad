@@ -20,8 +20,12 @@ export async function POST(req: NextRequest) {
     // --- Input validation ---
     const parsed = CreateOrderSchema.safeParse(body)
     if (!parsed.success) {
+      const fieldErrors = parsed.error.flatten().fieldErrors
+      console.error('[create-order] Validation failed:', JSON.stringify(fieldErrors))
+      const firstErrorMessage =
+        Object.values(fieldErrors).flat()[0] || 'Invalid request data'
       return NextResponse.json(
-        { error: 'Invalid request data', details: parsed.error.flatten() },
+        { error: firstErrorMessage, details: parsed.error.flatten() },
         { status: 400 }
       )
     }
@@ -36,10 +40,11 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // --- Shipping destination validation ---
-    if (shipping_address.country !== 'IN') {
+    // --- Destination-driven currency enforcement (Arbitrage Shield) ---
+    // If shipping internationally outside India, transaction MUST be in USD
+    if (shipping_address.country !== 'IN' && currency !== 'USD') {
       return NextResponse.json(
-        { error: 'International shipping is not yet configured. Only India (IN) is currently supported.' },
+        { error: 'Orders shipping outside India must be placed in USD with international express delivery.' },
         { status: 400 }
       )
     }
@@ -131,9 +136,12 @@ export async function POST(req: NextRequest) {
     }
 
     // --- Shipping calculation (configured rule) ---
-    const shippingThresholdMinor = 299900 // ₹2,999
-    const shippingMinor = subtotalMinor >= shippingThresholdMinor ? 0 : 15000 // ₹150
-    const taxMinor = 0 // GST handled separately when configured
+    const isDomestic = shipping_address.country === 'IN'
+    const shippingThresholdMinor = isDomestic ? 299900 : 20000 // ₹2,999 or $200
+    const shippingMinor = isDomestic
+      ? (subtotalMinor >= shippingThresholdMinor ? 0 : 15000) // ₹150 domestic
+      : (subtotalMinor >= shippingThresholdMinor ? 0 : 2500)  // $25 DHL Express
+    const taxMinor = 0 // GST / Customs handled in product pricing
     const discountMinor = 0
     const totalMinor = subtotalMinor + shippingMinor + taxMinor - discountMinor
 
@@ -147,12 +155,39 @@ export async function POST(req: NextRequest) {
     const userSupabase = await createClient()
     const { data: { user } } = await userSupabase.auth.getUser()
 
+    let validatedUserId: string | null = null
+    if (user?.id) {
+      try {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('id')
+          .eq('id', user.id)
+          .maybeSingle()
+
+        if (profile) {
+          validatedUserId = profile.id
+        } else {
+          // Auto-insert profile for this user if missing
+          const { error: pErr } = await supabase.from('profiles').insert({
+            id: user.id,
+            email: user.email || shipping_address.email,
+            full_name: shipping_address.full_name,
+          })
+          if (!pErr) {
+            validatedUserId = user.id
+          }
+        }
+      } catch (err) {
+        console.warn('[create-order] profile check warning:', err)
+      }
+    }
+
     // --- Create order in DB (pending state) ---
     const { data: order, error: orderError } = await supabase
       .from('orders')
       .insert({
-        user_id: user?.id ?? null,
-        guest_email: user ? null : shipping_address.email,
+        user_id: validatedUserId,
+        guest_email: validatedUserId ? null : shipping_address.email,
         order_number: orderNumber,
         status: 'payment_pending',
         currency,
@@ -177,7 +212,10 @@ export async function POST(req: NextRequest) {
 
     if (orderError || !order) {
       console.error('[create-order] DB error', orderError)
-      return NextResponse.json({ error: 'Failed to create order. Please try again.' }, { status: 500 })
+      return NextResponse.json({
+        error: orderError?.message || 'Failed to create order. Please try again.',
+        details: orderError,
+      }, { status: 500 })
     }
 
     // --- Insert order items ---
@@ -215,11 +253,14 @@ export async function POST(req: NextRequest) {
         receipt: orderNumber,
         notes: { order_id: order.id },
       })
-    } catch (rzpError) {
+    } catch (rzpError: any) {
       console.error('[create-order] Razorpay error', rzpError)
       // Order exists but payment order failed — update status
       await supabase.from('orders').update({ status: 'failed' }).eq('id', order.id)
-      return NextResponse.json({ error: 'Could not create payment order. Please try again.' }, { status: 500 })
+      return NextResponse.json({
+        error: 'Could not create payment order. Please try again.',
+        details: rzpError?.error || rzpError?.message || String(rzpError),
+      }, { status: 500 })
     }
 
     // --- Save Razorpay order reference ---

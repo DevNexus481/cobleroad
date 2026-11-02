@@ -56,6 +56,8 @@ export async function createClient() {
   })
 }
 
+import { createClient as createSupabaseClient } from '@supabase/supabase-js'
+
 /**
  * Admin server client using the service-role key — bypasses RLS.
  * NEVER expose this to the browser. Only use in trusted server contexts.
@@ -66,27 +68,12 @@ export async function createAdminClient() {
     throw new Error('SUPABASE_SERVICE_ROLE_KEY is not configured')
   }
 
-  const cookieStore = await cookies()
   const url = getCleanSupabaseUrl()
 
-  return createServerClient(
+  return createSupabaseClient(
     url,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY,
     {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll()
-        },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            )
-          } catch {
-            // Ignore
-          }
-        },
-      },
       auth: {
         autoRefreshToken: false,
         persistSession: false,

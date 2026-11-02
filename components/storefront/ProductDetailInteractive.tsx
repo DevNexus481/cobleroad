@@ -8,7 +8,7 @@ import { ProductColourSelector } from './ProductColourSelector'
 import { PersonalisationEditor } from './PersonalisationEditor'
 import { ProductAccordions } from './ProductAccordions'
 import { useCart } from './CartProvider'
-import { formatAmount } from '@/lib/currency'
+import { formatAmount, calculateProductPrice } from '@/lib/currency'
 import type { Product, ProductVariant, PersonalisationConfig } from '@/types'
 
 function generateId(): string {
@@ -42,7 +42,7 @@ export function ProductDetailInteractive({
   demoData,
   isDemo,
 }: ProductDetailInteractiveProps) {
-  const { addItem, openCart } = useCart()
+  const { addItem, openCart, currency } = useCart()
 
   // 1. Initial Variant Selection
   const allVariants = useMemo(() => {
@@ -175,12 +175,21 @@ export function ProductDetailInteractive({
       alt: img.alt || product.name,
     }))
   }, [product, activeVariant, demoData])
-
   // Price & Stock for the selected variant
-  const activePrice =
-    activeVariant?.prices?.find((p) => p.currency === 'INR') ??
+  const rawPrice =
+    activeVariant?.prices?.find((p) => p.currency === currency) ??
     activeVariant?.prices?.[0] ??
     (demoData ? { currency: 'INR' as const, amount_minor: demoData.price } : null)
+
+  const activePrice = rawPrice
+    ? {
+        currency,
+        amount_minor:
+          rawPrice.currency === currency
+            ? rawPrice.amount_minor
+            : calculateProductPrice(rawPrice.amount_minor, currency),
+      }
+    : null
 
   const stock = activeVariant?.stock_quantity ?? demoData?.stock ?? 0
   const isOutOfStock = stock <= 0

@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { Menu, X, Search, ShoppingBag, User, Package } from 'lucide-react'
 import { useCart } from './CartProvider'
 import { QuickSearchModal } from './QuickSearchModal'
-import { ThemeToggle } from './ThemeToggle'
 
 const NAV_LINKS = [
   { href: '/shop', label: 'Shop' },
@@ -27,7 +26,7 @@ export function Navigation() {
   const [scrolled, setScrolled] = useState(false)
   const [showAnnouncement, setShowAnnouncement] = useState(false)
   const [announcementIndex, setAnnouncementIndex] = useState(0)
-  const { itemCount, toggleCart } = useCart()
+  const { itemCount, toggleCart, currency, setCurrency } = useCart()
 
   useEffect(() => {
     try {
@@ -133,20 +132,22 @@ export function Navigation() {
           {/* Actions */}
           <div className="flex items-center gap-1">
             {/* INR currency indicator */}
-            <span
-              className="hidden lg:flex items-center"
+            {/* Currency Selector */}
+            <button
+              type="button"
+              onClick={() => setCurrency(currency === 'INR' ? 'USD' : 'INR')}
+              className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-sm text-[0.6875rem] font-medium tracking-[0.08em] transition-all"
               style={{
-                fontSize: '0.6875rem',
-                letterSpacing: '0.08em',
-                color: 'var(--colour-charcoal)',
-                opacity: 0.55,
-                marginRight: '0.25rem',
-                fontWeight: 500,
+                border: '1px solid var(--colour-border)',
+                backgroundColor: 'var(--colour-parchment)',
+                color: 'var(--colour-espresso)',
+                cursor: 'pointer',
               }}
-              aria-label="Currency: Indian Rupee"
+              title={`Currently viewing in ${currency}. Click to switch to ${currency === 'INR' ? 'USD ($)' : 'INR (₹)'}.`}
+              aria-label={`Switch currency from ${currency}`}
             >
-              INR ₹
-            </span>
+              <span>{currency === 'INR' ? '🇮🇳 INR ₹' : '🌐 USD $'}</span>
+            </button>
 
             <button
               type="button"
@@ -158,8 +159,6 @@ export function Navigation() {
               <Search size={18} strokeWidth={1.5} />
             </button>
 
-            {/* Dark / Light Mode Toggle */}
-            <ThemeToggle />
 
             <Link href="/account" className="nav-icon-btn" aria-label="My account" id="nav-account-btn">
               <User size={18} strokeWidth={1.5} />
@@ -224,8 +223,26 @@ export function Navigation() {
         </nav>
 
         <div className="mt-auto pt-6 flex flex-col gap-2">
-          {/* Mobile Theme Switcher */}
-          <ThemeToggle variant="row" />
+          {/* Mobile Currency Switcher */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.75rem 0', borderTop: '1px solid var(--colour-border-light)' }}>
+            <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', opacity: 0.6 }}>Currency</span>
+            <button
+              type="button"
+              onClick={() => setCurrency(currency === 'INR' ? 'USD' : 'INR')}
+              style={{
+                padding: '0.25rem 0.6rem',
+                fontSize: '0.75rem',
+                border: '1px solid var(--colour-border)',
+                backgroundColor: 'var(--colour-parchment)',
+                borderRadius: '2px',
+                fontWeight: 600,
+                color: 'var(--colour-espresso)',
+                cursor: 'pointer',
+              }}
+            >
+              {currency === 'INR' ? '🇮🇳 INR (₹)' : '🌐 USD ($)'}
+            </button>
+          </div>
 
           <div className="flex gap-4 pt-2">
             <Link href="/account" className="nav-drawer-link" onClick={() => setDrawerOpen(false)}

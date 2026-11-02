@@ -9,9 +9,9 @@ import { z } from 'zod'
 export const ShippingAddressSchema = z.object({
   full_name: z.string().min(2, 'Full name is required').max(100),
   email: z.string().email('Valid email address required'),
-  phone: z.string().min(10, 'Valid phone number required').max(20).optional(),
-  line1: z.string().min(5, 'Address line 1 is required').max(200),
-  line2: z.string().max(200).optional(),
+  phone: z.string().max(20).optional().nullable().or(z.literal('')),
+  line1: z.string().min(3, 'Address line 1 is required').max(200),
+  line2: z.string().max(200).optional().nullable().or(z.literal('')),
   city: z.string().min(2, 'City is required').max(100),
   state: z.string().min(2, 'State is required').max(100),
   postal_code: z.string().min(4, 'Postal / PIN code required').max(20),
@@ -23,10 +23,10 @@ export type ShippingAddressInput = z.infer<typeof ShippingAddressSchema>
 // --- Cart item ---
 
 export const CartItemSchema = z.object({
-  product_id: z.string().uuid(),
-  variant_id: z.string().uuid(),
+  product_id: z.string().min(1, 'Product ID is required'),
+  variant_id: z.string().min(1, 'Variant ID is required'),
   quantity: z.number().int().positive().max(50),
-  personalisation_text: z.string().max(10).optional(),
+  personalisation_text: z.string().max(10).optional().nullable().or(z.literal('')),
 })
 
 // --- Order creation ---
@@ -34,7 +34,7 @@ export const CartItemSchema = z.object({
 export const CreateOrderSchema = z.object({
   items: z.array(CartItemSchema).min(1, 'Cart cannot be empty'),
   shipping_address: ShippingAddressSchema,
-  currency: z.enum(['INR']), // Only INR enabled initially
+  currency: z.enum(['INR', 'USD']),
 })
 
 export type CreateOrderInput = z.infer<typeof CreateOrderSchema>

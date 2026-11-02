@@ -24,7 +24,7 @@ export interface CurrencyConfig {
 
 export const CURRENCY_CONFIGS: Record<CurrencyCode, CurrencyConfig> = {
   INR: { code: 'INR', name: 'Indian Rupee', symbol: '₹', minorUnitPrecision: 2, enabled: true },
-  USD: { code: 'USD', name: 'US Dollar', symbol: '$', minorUnitPrecision: 2, enabled: false },
+  USD: { code: 'USD', name: 'US Dollar', symbol: '$', minorUnitPrecision: 2, enabled: true },
   GBP: { code: 'GBP', name: 'British Pound', symbol: '£', minorUnitPrecision: 2, enabled: false },
   EUR: { code: 'EUR', name: 'Euro', symbol: '€', minorUnitPrecision: 2, enabled: false },
   AED: { code: 'AED', name: 'UAE Dirham', symbol: 'د.إ', minorUnitPrecision: 2, enabled: false },
@@ -45,7 +45,7 @@ export interface Market {
 
 export const MARKETS: Record<MarketCode, Market> = {
   IN: { code: 'IN', name: 'India', defaultCurrency: 'INR', enabled: true },
-  INTL: { code: 'INTL', name: 'International', defaultCurrency: 'USD', enabled: false },
+  INTL: { code: 'INTL', name: 'International', defaultCurrency: 'USD', enabled: true },
 }
 
 // --- Products ---

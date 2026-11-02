@@ -5,7 +5,6 @@ import { ArrowRight, Truck, RefreshCw, Shield, Leaf } from 'lucide-react'
 import { ProductGridCard } from '@/components/storefront/ProductGridCard'
 import PerspectiveTunnelHero from '@/components/ui/perspective-tunnel-hero'
 import { FlipWords } from '@/components/ui/flip-words'
-import { AnimatedShinyBadge } from '@/components/ui/animated-shiny-badge'
 import { Marquee } from '@/components/ui/marquee'
 import { AmbientHeroSpotlight, SpotlightCard } from '@/components/ui/spotlight'
 import { ScrollReveal } from '@/components/ui/scroll-reveal'
@@ -131,13 +130,7 @@ export default async function HomePage() {
 
         {/* Content */}
         <div className="container-site hero__content" style={{ paddingTop: '3.5rem', paddingBottom: '5.5rem', zIndex: 2 }}>
-          <div style={{ marginBottom: '1rem' }}>
-            <AnimatedShinyBadge
-              text="Artisanal Leather Atelier"
-              subtext="Handcrafted in India"
-              href="/our-story"
-            />
-          </div>
+          <span className="hero__eyebrow">Leather Since Ages.</span>
 
           <h1 className="hero__title">
             Made to Carry<br />

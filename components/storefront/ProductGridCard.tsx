@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Check, ShoppingBag, Sparkles } from 'lucide-react'
 import { useCart } from './CartProvider'
-import { formatAmount } from '@/lib/currency'
+import { formatAmount, calculateProductPrice } from '@/lib/currency'
 import type { CurrencyCode } from '@/types'
 
 const LEATHER_COLOUR_MAP: Record<string, string> = {
@@ -65,13 +65,22 @@ export function ProductGridCard({
   secondaryImage,
   variants,
 }: ProductGridCardProps) {
-  const { addItem, openCart } = useCart()
+  const { addItem, openCart, currency } = useCart()
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
   const [isAdding, setIsAdding] = useState(false)
 
   const activeVariant = variants[selectedVariantIndex] ?? variants[0]
-  const price = activeVariant?.prices[0]
+  const rawPrice = activeVariant?.prices.find((p) => p.currency === currency) ?? activeVariant?.prices[0]
+  const displayPrice = rawPrice
+    ? {
+        currency,
+        amount_minor:
+          rawPrice.currency === currency
+            ? rawPrice.amount_minor
+            : calculateProductPrice(rawPrice.amount_minor, currency),
+      }
+    : null
   const isOutOfStock = activeVariant ? activeVariant.stock_quantity <= 0 : false
 
   // Image dynamically updates to selected variant's genuine photograph
@@ -86,7 +95,7 @@ export function ProductGridCard({
     e.preventDefault()
     e.stopPropagation()
 
-    if (isOutOfStock || !price) return
+    if (isOutOfStock || !displayPrice) return
 
     setIsAdding(true)
     addItem({
@@ -96,8 +105,8 @@ export function ProductGridCard({
       quantity: 1,
       personalisation: null,
       price_snapshot: {
-        amountMinor: price.amount_minor,
-        currency: price.currency,
+        amountMinor: displayPrice.amount_minor,
+        currency: displayPrice.currency,
       },
       product: {
         id,
@@ -205,7 +214,7 @@ export function ProductGridCard({
           )}
 
           {/* Quick Add Overlay on hover */}
-          {!isOutOfStock && price && (
+          {!isOutOfStock && displayPrice && (
             <div
               style={{
                 position: 'absolute',
@@ -332,9 +341,9 @@ export function ProductGridCard({
             marginTop: '0.25rem',
           }}
         >
-          {price ? (
+          {displayPrice ? (
             <span className="product-card__price">
-              {formatAmount(price.amount_minor, price.currency)}
+              {formatAmount(displayPrice.amount_minor, displayPrice.currency)}
             </span>
           ) : (
             <span
