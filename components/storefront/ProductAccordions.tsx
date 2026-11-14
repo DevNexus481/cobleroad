@@ -165,7 +165,7 @@ export function ProductAccordions({
       content: (
         <div>
           <p style={{ marginBottom: '0.5rem', lineHeight: 1.7 }}>
-            Every eligible Cobleroad piece includes complimentary custom hot-stamp monogramming
+            Every eligible THE COBBLEROAD piece includes complimentary custom hot-stamp monogramming
             (up to 3 uppercase Latin letters).
           </p>
           <p style={{ fontSize: '0.8125rem', opacity: 0.8, lineHeight: 1.65 }}>
@@ -202,7 +202,7 @@ export function ProductAccordions({
       content: (
         <div>
           <p style={{ marginBottom: '0.5rem', lineHeight: 1.7 }}>
-            Cobleroad goods are constructed to be handed down. We guarantee our leathers, hardware,
+            THE COBBLEROAD goods are constructed to be handed down. We guarantee our leathers, hardware,
             zippers, and structural stitching against manufacturing flaws for life.
           </p>
           <p style={{ fontSize: '0.8125rem', opacity: 0.8, lineHeight: 1.65 }}>

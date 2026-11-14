@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { ShoppingBag, Users, Package, TrendingUp, AlertCircle, Clock, CheckCircle2 } from 'lucide-react'
 import { formatAmount } from '@/lib/currency'
 
-export const metadata = { title: 'Admin Dashboard — Cobleroad' }
+export const metadata = { title: 'Admin Dashboard — THE COBBLEROAD' }
 
 async function getDashboardStats() {
   const supabase = await createAdminClient()

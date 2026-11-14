@@ -7,7 +7,7 @@ import { formatAmount } from '@/lib/currency'
 import { Search as SearchIcon } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Search Catalogue — Cobleroad',
+  title: 'Search Catalogue — THE COBBLEROAD',
   description: 'Search handcrafted genuine leather bags, folios, travel essentials, and accessories.',
 }
 
@@ -197,14 +197,14 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                   href={`/products/${product.slug}`}
                   style={{ textDecoration: 'none', color: 'inherit', display: 'flex', flexDirection: 'column' }}
                 >
-                  <div style={{ position: 'relative', aspectRatio: '4/5', backgroundColor: 'var(--colour-parchment)', overflow: 'hidden', marginBottom: '1rem', borderRadius: '2px' }}>
+                  <div style={{ position: 'relative', aspectRatio: '16/10', backgroundColor: '#FFFFFF', border: '1px solid var(--colour-border-light)', overflow: 'hidden', marginBottom: '1rem', borderRadius: '2px' }}>
                     {image ? (
                       <Image
                         src={image.url}
                         alt={image.alt ?? product.name}
                         fill
                         sizes="(max-width: 768px) 100vw, 33vw"
-                        style={{ objectFit: 'cover' }}
+                        style={{ objectFit: 'contain', padding: '0.25rem' }}
                       />
                     ) : (
                       <div style={{ width: '100%', height: '100%', backgroundColor: 'var(--colour-parchment)' }} />

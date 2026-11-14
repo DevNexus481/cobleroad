@@ -6,6 +6,8 @@
 // Images live at /images/products/real/{slug}/{slug}-XX.ext
 // =============================================================================
 
+import SCRAPED_ITEMS from './scraped-catalogue.json'
+
 export interface CatalogueVariant {
   colour: string
   colourHex: string
@@ -39,7 +41,7 @@ export interface CatalogueProduct {
   material: string
 }
 
-export const REAL_PRODUCTS: CatalogueProduct[] = [
+const BASE_PRODUCTS: CatalogueProduct[] = [
   // ─── WORK BAGS ───────────────────────────────────────────────────────────────
 
   {
@@ -539,8 +541,76 @@ export const REAL_PRODUCTS: CatalogueProduct[] = [
   },
 ]
 
-/** Quick lookup by slug */
-export const PRODUCT_BY_SLUG = Object.fromEntries(REAL_PRODUCTS.map((p) => [p.slug, p]))
+// Map scraped items from thecobbleroad.com into CatalogueProduct format
+export const SCRAPED_PRODUCTS: CatalogueProduct[] = (SCRAPED_ITEMS as any[]).map((item) => {
+  const nameLower = (item.name || '').toLowerCase()
+  const colour = nameLower.includes('tan')
+    ? 'Tan'
+    : nameLower.includes('coal') || nameLower.includes('black')
+    ? 'Black'
+    : nameLower.includes('green')
+    ? 'Olive Green'
+    : nameLower.includes('walnut')
+    ? 'Walnut'
+    : nameLower.includes('mocha')
+    ? 'Mocha'
+    : 'Cognac'
+
+  const colourHex =
+    colour === 'Tan'
+      ? '#C58F49'
+      : colour === 'Black'
+      ? '#1A1817'
+      : colour === 'Olive Green'
+      ? '#4F5D3E'
+      : colour === 'Walnut'
+      ? '#5C3826'
+      : colour === 'Mocha'
+      ? '#422B1E'
+      : '#9A633F'
+
+  const primary = item.primaryImage || (item.gallery && item.gallery[0]) || '/images/hero/hero-briefcase.jpg'
+
+  return {
+    slug: item.slug,
+    name: item.name,
+    shortDescription: item.shortDescription || item.description?.slice(0, 160) || '',
+    description: item.description || '',
+    primaryImage: primary,
+    gallery: item.gallery && item.gallery.length > 0 ? item.gallery : [primary],
+    variants: [
+      {
+        colour,
+        colourHex,
+        imageUrl: primary,
+        sku: `CBR-${item.slug.slice(0, 3).toUpperCase()}-001`,
+      },
+    ],
+    collections: Array.from(new Set([...(item.collections || []), item.category, item.subcategory].filter(Boolean))),
+    priceINR: item.priceINR || 120000,
+    personalisable: item.personalisable ?? true,
+    featured: Boolean(item.featured),
+    material: item.material || 'Genuine full-grain leather',
+  }
+})
+
+// Unified product list prioritizing scraped genuine items
+const SEEN_SLUGS = new Set<string>()
+export const REAL_PRODUCTS: CatalogueProduct[] = []
+
+for (const p of [...SCRAPED_PRODUCTS, ...BASE_PRODUCTS]) {
+  if (!SEEN_SLUGS.has(p.slug)) {
+    SEEN_SLUGS.add(p.slug)
+    REAL_PRODUCTS.push(p)
+  }
+}
+
+/** Quick lookup by slug (case-insensitive) */
+export const PRODUCT_BY_SLUG: Record<string, CatalogueProduct> = Object.fromEntries([
+  ...REAL_PRODUCTS.map((p) => [p.slug, p]),
+  ...REAL_PRODUCTS.map((p) => [p.slug.toLowerCase(), p]),
+  ...REAL_PRODUCTS.map((p) => [p.slug.toUpperCase(), p]),
+])
 
 /** Featured products for homepage */
 export const FEATURED_PRODUCTS = REAL_PRODUCTS.filter((p) => p.featured)

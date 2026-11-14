@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Truck, Clock, ShieldCheck, HelpCircle } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Shipping & Delivery Policy — Cobleroad',
+  title: 'Shipping & Delivery Policy — THE COBBLEROAD',
   description: 'Delivery timelines, courier partnerships, and complimentary domestic shipping thresholds across India.',
 }
 
@@ -78,7 +78,7 @@ export default function ShippingPolicyPage() {
               3. Order Tracking & Real-Time Updates
             </h2>
             <p>
-              As soon as your shipment is scanned by the courier, you will receive an SMS and email notification containing your AWB tracking link. You can track your courier&rsquo;s journey in real-time or view status updates directly within your <Link href="/account" style={{ color: 'var(--colour-cognac)', textDecoration: 'underline' }}>Cobleroad Account</Link>.
+              As soon as your shipment is scanned by the courier, you will receive an SMS and email notification containing your AWB tracking link. You can track your courier&rsquo;s journey in real-time or view status updates directly within your <Link href="/account" style={{ color: 'var(--colour-cognac)', textDecoration: 'underline' }}>THE COBBLEROAD Account</Link>.
             </p>
           </div>
 

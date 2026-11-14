@@ -328,7 +328,7 @@ export async function getValidatedCart(
       product: {
         id: product?.id || row.product_id,
         slug: product?.slug || '',
-        name: product?.name || 'Cobleroad Handcrafted Piece',
+        name: product?.name || 'THE COBBLEROAD Handcrafted Piece',
         is_demo: Boolean(product?.is_demo),
       },
       variant: {

@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { matchSeoRoute } from '@/lib/navigation/seo-routes'
 
 export function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl
+  const { pathname, searchParams } = request.nextUrl
 
   // Ignore static assets, images, and internal routes
   if (
@@ -14,7 +15,22 @@ export function proxy(request: NextRequest) {
     return NextResponse.next()
   }
 
-  const response = NextResponse.next()
+  // Check SEO Route Mapping (Rewrites legacy/canonical indexed paths)
+  const seoMatch = matchSeoRoute(pathname, searchParams)
+  let response: NextResponse
+
+  if (seoMatch) {
+    const url = request.nextUrl.clone()
+    url.pathname = seoMatch.destinationPath
+    if (seoMatch.destinationQuery) {
+      for (const [key, val] of Object.entries(seoMatch.destinationQuery)) {
+        url.searchParams.set(key, val)
+      }
+    }
+    response = NextResponse.rewrite(url)
+  } else {
+    response = NextResponse.next()
+  }
 
   // 1. Check if user already set their preferred currency
   const existingCurrencyCookie = request.cookies.get('cobleroad_currency')?.value

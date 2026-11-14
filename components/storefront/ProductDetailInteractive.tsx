@@ -109,22 +109,22 @@ export function ProductDetailInteractive({
           {
             id: 'cbr-tan-main',
             url: '/images/products/duffle-travel.jpg',
-            alt: 'The Cobleroad Duffle — Tan Heritage',
+            alt: 'THE COBBLEROAD Duffle — Tan Heritage',
           },
           {
             id: 'cbr-black-carry',
             url: '/images/products/variants/meridian-duffle-black-front.jpg',
-            alt: 'The Cobleroad Duffle — Black Carry',
+            alt: 'THE COBBLEROAD Duffle — Black Carry',
           },
           {
             id: 'cbr-shoulder-strap',
             url: '/images/products/meridian-duffle-angle.jpg',
-            alt: 'The Cobleroad Duffle — Shoulder Carry Silhouette',
+            alt: 'THE COBBLEROAD Duffle — Shoulder Carry Silhouette',
           },
           {
             id: 'cbr-interior-craft',
             url: '/images/products/meridian-duffle-detail.jpg',
-            alt: 'The Cobleroad Duffle — Interior Craftsmanship & Access',
+            alt: 'THE COBBLEROAD Duffle — Interior Craftsmanship & Access',
           },
         ]
       }
@@ -132,7 +132,7 @@ export function ProductDetailInteractive({
         {
           id: 'demo-img-1',
           url: demoData?.image || '/images/hero/hero-briefcase.jpg',
-          alt: product?.name || demoData?.name || 'Cobleroad Bag',
+          alt: product?.name || demoData?.name || 'THE COBBLEROAD Bag',
         },
         {
           id: 'demo-img-2',
@@ -261,7 +261,7 @@ export function ProductDetailInteractive({
     setTimeout(() => setAdded(false), 2400)
   }
 
-  const productName = product?.name ?? demoData?.name ?? 'Cobleroad Piece'
+  const productName = product?.name ?? demoData?.name ?? 'THE COBBLEROAD Piece'
   const description = product?.description ?? demoData?.desc ?? ''
   const materialDesc = product?.material_description ?? demoData?.material ?? null
 

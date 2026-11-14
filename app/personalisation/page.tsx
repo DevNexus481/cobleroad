@@ -5,9 +5,9 @@ import { ArrowRight, ShieldCheck, Flame, Sparkles, Check, Clock } from 'lucide-r
 import { MonogramStudioInteractive } from '@/components/storefront/MonogramStudioInteractive'
 
 export const metadata: Metadata = {
-  title: 'Complimentary Personalisation & Monogramming — Cobleroad',
+  title: 'Complimentary Personalisation & Monogramming — THE COBBLEROAD',
   description:
-    'Artisanal hot-stamped monogramming on Cobleroad genuine leather goods. Hand-set using solid brass typographic dies heated to 120°C at our New Delhi atelier.',
+    'Artisanal hot-stamped monogramming on THE COBBLEROAD genuine leather goods. Hand-set using solid brass typographic dies heated to 120°C at our New Delhi atelier.',
 }
 
 export default function PersonalisationPage() {
@@ -115,7 +115,7 @@ export default function PersonalisationPage() {
     },
     {
       q: 'Is there any additional charge for monogramming?',
-      a: 'No. Bespoke personalisation is entirely complimentary across all eligible items in the Cobleroad collection. Simply enter your initials on the product page prior to adding to cart.',
+      a: 'No. Bespoke personalisation is entirely complimentary across all eligible items in THE COBBLEROAD collection. Simply enter your initials on the product page prior to adding to cart.',
     },
   ]
 
@@ -131,7 +131,7 @@ export default function PersonalisationPage() {
             The Mark of Ownership.
           </h1>
           <p style={{ fontSize: '1.0625rem', lineHeight: 1.8, color: 'var(--colour-charcoal)', opacity: 0.85, maxWidth: '42rem', margin: '0 auto 2.5rem' }}>
-            In an era of disposable mass manufacturing, Cobleroad offers something enduringly personal. Every eligible piece is hand-stamped in our New Delhi atelier using solid milled brass dies heated to 120&deg;C—provided complimentary on every order.
+            In an era of disposable mass manufacturing, THE COBBLEROAD offers something enduringly personal. Every eligible piece is hand-stamped in our New Delhi atelier using solid milled brass dies heated to 120&deg;C—provided complimentary on every order.
           </p>
 
           {/* 4 Atelier Credentials */}

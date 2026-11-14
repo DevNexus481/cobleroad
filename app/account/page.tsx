@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { formatAmount } from '@/lib/currency'
 import { User, Package, LogOut, Shield } from 'lucide-react'
 
-export const metadata = { title: 'My Account — Cobleroad' }
+export const metadata = { title: 'My Account — THE COBBLEROAD' }
 
 export default async function AccountPage() {
   const user = await requireAuth()

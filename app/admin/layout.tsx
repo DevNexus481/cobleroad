@@ -33,7 +33,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               marginBottom: '0.25rem',
             }}
           >
-            Cobleroad
+            THE COBBLEROAD
           </Link>
           <span style={{ fontSize: '0.625rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--colour-cognac-light)', fontWeight: 600 }}>
             Admin

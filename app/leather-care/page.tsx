@@ -3,8 +3,8 @@ import Link from 'next/link'
 import { Sparkles, Droplets, Sun, Wind, CheckCircle2, AlertTriangle, ArrowRight } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Leather Care Guide — Cobleroad',
-  description: 'Care, maintenance, and patina preservation instructions for your Cobleroad vegetable-tanned leather goods.',
+  title: 'Leather Care Guide — THE COBBLEROAD',
+  description: 'Care, maintenance, and patina preservation instructions for your THE COBBLEROAD vegetable-tanned leather goods.',
 }
 
 export default function LeatherCarePage() {
@@ -56,7 +56,7 @@ export default function LeatherCarePage() {
             The Living Care Guide
           </h1>
           <p style={{ fontSize: '1.0625rem', lineHeight: 1.8, color: 'var(--colour-charcoal)', opacity: 0.85 }}>
-            Vegetable-tanned leather is a natural, living material. With modest, thoughtful attention, your Cobleroad piece will not only withstand decades of daily use—it will develop a rich, luminous patina unique to your journey.
+            Vegetable-tanned leather is a natural, living material. With modest, thoughtful attention, your THE COBBLEROAD piece will not only withstand decades of daily use—it will develop a rich, luminous patina unique to your journey.
           </p>
         </div>
       </section>

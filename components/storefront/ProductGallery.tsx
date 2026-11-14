@@ -39,12 +39,9 @@ export function ProductGallery({
     setActiveIndex(0)
   }, [images])
 
-  const safeImages = images.length > 0 ? images : [
-    {
-      url: '/images/hero/hero-briefcase.jpg',
-      alt: productName,
-    },
-  ]
+  const validImages = images.filter((img) => Boolean(img?.url && img.url.trim().length > 0))
+  const hasImages = validImages.length > 0
+  const safeImages = validImages
 
   const hasInitials = Boolean(initials && initials.trim().length > 0 && isPersonalisable)
 
@@ -54,7 +51,7 @@ export function ProductGallery({
       <div
         style={{
           position: 'relative',
-          aspectRatio: '4/5',
+          aspectRatio: '16/11',
           overflow: 'hidden',
           backgroundColor: '#FFFFFF',
           marginBottom: '1rem',
@@ -65,34 +62,75 @@ export function ProductGallery({
         onMouseEnter={() => setIsZoomed(true)}
         onMouseLeave={() => setIsZoomed(false)}
       >
-        {safeImages.map((img, i) => (
+        {!hasImages ? (
           <div
-            key={img.id ?? `${img.url}-${i}`}
             style={{
               position: 'absolute',
               inset: 0,
-              opacity: i === activeIndex ? 1 : 0,
-              pointerEvents: i === activeIndex ? 'auto' : 'none',
-              transition: 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '1rem',
+              backgroundColor: 'rgba(0, 0, 0, 0.02)',
             }}
           >
-            <Image
-              src={img.url}
-              alt={img.alt ?? `${productName} view ${i + 1}`}
-              fill
-              priority={i === 0}
-              sizes="(max-width: 768px) 100vw, 50vw"
+            <div
               style={{
-                objectFit: 'contain',
-                objectPosition: 'center',
-                padding: '1rem',
-                transform: isZoomed && i === activeIndex ? 'scale(1.04)' : 'scale(1)',
-                transition: 'transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
+                width: '4rem',
+                height: '4rem',
+                borderRadius: '50%',
+                border: '1px dashed var(--colour-border)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                opacity: 0.6,
               }}
-              quality={90}
-            />
+            >
+              <span style={{ fontSize: '1.25rem', opacity: 0.7 }}>✦</span>
+            </div>
+            <span
+              style={{
+                fontSize: '0.75rem',
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                opacity: 0.6,
+                fontWeight: 500,
+              }}
+            >
+              Photograph Pending
+            </span>
           </div>
-        ))}
+        ) : (
+          safeImages.map((img, i) => (
+            <div
+              key={img.id ?? `${img.url}-${i}`}
+              style={{
+                position: 'absolute',
+                inset: 0,
+                opacity: i === activeIndex ? 1 : 0,
+                pointerEvents: i === activeIndex ? 'auto' : 'none',
+                transition: 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+              }}
+            >
+              <Image
+                src={img.url}
+                alt={img.alt ?? `${productName} view ${i + 1}`}
+                fill
+                priority={i === 0}
+                sizes="(max-width: 768px) 100vw, 50vw"
+                style={{
+                  objectFit: 'contain',
+                  objectPosition: 'center',
+                  padding: '0.5rem',
+                  transform: isZoomed && i === activeIndex ? 'scale(1.04)' : 'scale(1)',
+                  transition: 'transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
+                }}
+                quality={90}
+              />
+            </div>
+          ))
+        )}
 
         {/* LIVE MONOGRAM PREVIEW OVERLAY (Rendered on primary front view) */}
         {hasInitials && activeIndex === 0 && (

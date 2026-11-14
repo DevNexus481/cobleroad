@@ -71,7 +71,7 @@ export default function ContactPage() {
                     <a href="tel:+919820012345" style={{ textDecoration: 'none', color: 'inherit' }}>+91 98200 12345</a>
                   </p>
                   <a
-                    href="https://wa.me/919820012345?text=Hello%20Cobleroad,%20I%20have%20an%20inquiry%20regarding%20your%20leathercraft."
+                    href="https://wa.me/919820012345?text=Hello%20THE%20COBBLEROAD,%20I%20have%20an%20inquiry%20regarding%20your%20leathercraft."
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn btn-secondary"
@@ -99,7 +99,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h4 style={{ fontSize: '0.875rem', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Studio & Workshop</h4>
-                  <p style={{ fontSize: '0.9375rem', color: 'var(--colour-charcoal)', opacity: 0.85 }}>Cobleroad Leatherworks, 42 Civil Lines, Kanpur, UP, India</p>
+                  <p style={{ fontSize: '0.9375rem', color: 'var(--colour-charcoal)', opacity: 0.85 }}>THE COBBLEROAD Leatherworks, 42 Civil Lines, Kanpur, UP, India</p>
                   <p style={{ fontSize: '0.8125rem', opacity: 0.6 }}>Flagship showroom appointments available upon request.</p>
                 </div>
               </div>
@@ -115,7 +115,7 @@ export default function ContactPage() {
                 </div>
                 <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.75rem', fontWeight: 400, marginBottom: '0.75rem' }}>Message Received</h3>
                 <p style={{ fontSize: '0.9375rem', lineHeight: 1.7, color: 'var(--colour-charcoal)', opacity: 0.85, marginBottom: '2rem' }}>
-                  Thank you for reaching out to Cobleroad. An artisan client specialist will review your inquiry and reply to <strong>{formData.email}</strong> within four business hours.
+                  Thank you for reaching out to THE COBBLEROAD. An artisan client specialist will review your inquiry and reply to <strong>{formData.email}</strong> within four business hours.
                 </p>
                 <button
                   type="button"

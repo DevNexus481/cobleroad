@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { FileCheck, Shield, Scale, HelpCircle } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Terms & Conditions — Cobleroad',
+  title: 'Terms & Conditions — THE COBBLEROAD',
   description: 'Terms of sale, product authenticity guidelines, craftsmanship warranty, and service agreements.',
 }
 
@@ -18,7 +18,7 @@ export default function TermsPolicyPage() {
             Terms & Conditions of Service
           </h1>
           <p style={{ fontSize: '0.9375rem', color: 'var(--colour-charcoal)', opacity: 0.75 }}>
-            Last revised: October 2026 &bull; Cobleroad Goods & Atelier
+            Last revised: October 2026 &bull; THE COBBLEROAD Goods & Atelier
           </p>
         </div>
       </section>
@@ -31,7 +31,7 @@ export default function TermsPolicyPage() {
               1. Scope & Acceptance
             </h2>
             <p>
-              These Terms & Conditions govern your use of the website <strong>Cobleroad</strong> (accessible at <Link href="/" style={{ color: 'var(--colour-cognac)', textDecoration: 'underline' }}>cobleroad.com</Link>) and all purchases of handcrafted leather goods made through our online store. By browsing our catalogue, creating an account, or placing an order, you agree to be bound by these terms.
+              These Terms & Conditions govern your use of the website <strong>THE COBBLEROAD</strong> (accessible at <Link href="/" style={{ color: 'var(--colour-cognac)', textDecoration: 'underline' }}>cobleroad.com</Link>) and all purchases of handcrafted leather goods made through our online store. By browsing our catalogue, creating an account, or placing an order, you agree to be bound by these terms.
             </p>
           </div>
 
@@ -40,7 +40,7 @@ export default function TermsPolicyPage() {
               2. Authentic Full-Grain Leather Characteristics
             </h2>
             <p style={{ marginBottom: '1rem' }}>
-              Cobleroad products are handcrafted exclusively from genuine, vegetable-tanned full-grain leather. Because leather is an organic material harvested from natural hides:
+              THE COBBLEROAD products are handcrafted exclusively from genuine, vegetable-tanned full-grain leather. Because leather is an organic material harvested from natural hides:
             </p>
             <ul style={{ paddingLeft: '1.25rem', marginBottom: '1rem' }}>
               <li>Subtle variations in grain density, natural neck growth marks, small healed scratches, and tone differences are authentic hallmarks of genuine hide, not manufacturing flaws.</li>
@@ -56,7 +56,7 @@ export default function TermsPolicyPage() {
             <ul style={{ paddingLeft: '1.25rem', marginBottom: '1rem' }}>
               <li>All prices displayed on the store are denominated in Indian Rupees (INR) and are inclusive of Goods and Services Tax (GST) where applicable.</li>
               <li>Receipt of an order confirmation email indicates acknowledgment of your request; contract formation occurs upon dispatch of your goods from our atelier.</li>
-              <li>Cobleroad reserves the right to decline or cancel orders resulting from typographical pricing errors or unexpected inventory discrepancies, with an immediate full refund.</li>
+              <li>THE COBBLEROAD reserves the right to decline or cancel orders resulting from typographical pricing errors or unexpected inventory discrepancies, with an immediate full refund.</li>
             </ul>
           </div>
 
@@ -65,14 +65,14 @@ export default function TermsPolicyPage() {
               4. Lifetime Craftsmanship Warranty
             </h2>
             <p style={{ marginBottom: '1rem' }}>
-              Every piece crafted by Cobleroad carries a Lifetime Craftsmanship Warranty against manufacturing defects under normal intended use:
+              Every piece crafted by THE COBBLEROAD carries a Lifetime Craftsmanship Warranty against manufacturing defects under normal intended use:
             </p>
             <ul style={{ paddingLeft: '1.25rem', marginBottom: '1rem' }}>
               <li><strong>Covered:</strong> Broken solid brass hardware, failed zippers, separated stitching, or detached handle rivets.</li>
               <li><strong>Not Covered:</strong> Cosmetic surface scratches from routine use, damage from chemical solvents, misuse, overloading, or unauthorized third-party repairs.</li>
             </ul>
             <p>
-              In the event of a verified warranty claim, Cobleroad will repair the piece free of charge or replace it with an equivalent item if repair is unfeasible.
+              In the event of a verified warranty claim, THE COBBLEROAD will repair the piece free of charge or replace it with an equivalent item if repair is unfeasible.
             </p>
           </div>
 
@@ -81,7 +81,7 @@ export default function TermsPolicyPage() {
               5. Intellectual Property
             </h2>
             <p>
-              All trademarks, product photography, editorial copy, silhouettes, and website designs are the exclusive intellectual property of Cobleroad. Unauthorized reproduction, scraping, or commercial duplication is strictly prohibited.
+              All trademarks, product photography, editorial copy, silhouettes, and website designs are the exclusive intellectual property of THE COBBLEROAD. Unauthorized reproduction, scraping, or commercial duplication is strictly prohibited.
             </p>
           </div>
 

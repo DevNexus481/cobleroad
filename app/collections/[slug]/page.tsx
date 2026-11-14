@@ -33,8 +33,8 @@ export async function generateMetadata({ params }: CollectionPageProps): Promise
   const meta = COLLECTION_META[slug]
   const name = meta?.name ?? slug.replace(/-/g, ' ')
   return {
-    title: `${name} — Cobleroad`,
-    description: meta?.desc ?? `Shop ${name} at Cobleroad.`,
+    title: `${name} — THE COBBLEROAD`,
+    description: meta?.desc ?? `Shop ${name} at THE COBBLEROAD.`,
   }
 }
 

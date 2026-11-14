@@ -598,7 +598,7 @@ export default async function OrderDetailsPage({ params }: OrderDetailsPageProps
                 <span style={{ fontWeight: 600 }}>Lifetime Craftsmanship Guarantee</span>
               </div>
               <p style={{ fontSize: '0.75rem', opacity: 0.65, lineHeight: 1.6, margin: 0 }}>
-                Every Cobleroad piece is guaranteed for life against artisanal defects in materials and hardware.
+                Every THE COBBLEROAD piece is guaranteed for life against artisanal defects in materials and hardware.
               </p>
             </div>
           </div>

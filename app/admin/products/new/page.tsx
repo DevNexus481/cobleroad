@@ -36,7 +36,7 @@ export default async function NewProductPage() {
           List New Product
         </h1>
         <p style={{ fontSize: '0.875rem', opacity: 0.55, marginTop: '0.25rem' }}>
-          Create and publish a handcrafted leather piece to the Cobleroad storefront.
+          Create and publish a handcrafted leather piece to THE COBBLEROAD storefront.
         </p>
       </div>
 

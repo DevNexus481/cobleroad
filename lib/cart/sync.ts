@@ -144,7 +144,7 @@ export async function fetchServerCart(
         product: {
           id: product.id || row.product_id,
           slug: product.slug || '',
-          name: product.name || 'Cobleroad Piece',
+          name: product.name || 'THE COBBLEROAD Piece',
           is_demo: Boolean(product.is_demo),
         },
         variant: {

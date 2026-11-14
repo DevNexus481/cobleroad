@@ -164,7 +164,7 @@ export default function CheckoutPage() {
           key: keyId,
           amount: result.razorpay_amount,
           currency: result.currency,
-          name: 'Cobleroad',
+          name: 'THE COBBLEROAD',
           description: `Order ${result.order_number}`,
           order_id: result.razorpay_order_id,
           prefill: {
@@ -227,7 +227,7 @@ export default function CheckoutPage() {
       <div style={{ backgroundColor: 'var(--colour-parchment)', borderBottom: '1px solid var(--colour-border)', padding: '2rem 0 1.5rem' }}>
         <div className="container-site">
           <Link href="/" style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem', letterSpacing: '0.08em', textTransform: 'uppercase', textDecoration: 'none', color: 'var(--colour-espresso)' }}>
-            Cobleroad
+            THE COBBLEROAD
           </Link>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '1rem', fontSize: '0.75rem', color: 'var(--colour-charcoal)', opacity: 0.6 }}>
             <Link href="/cart" style={{ color: 'inherit' }}>Bag</Link>

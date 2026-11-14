@@ -4,8 +4,8 @@ import Link from 'next/link'
 import { ArrowRight, ShieldCheck, Feather, Award } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Our Story — Cobleroad Leathercraft',
-  description: 'The philosophy, heritage, and uncompromising craftsmanship behind Cobleroad genuine leather goods.',
+  title: 'Our Story — THE COBBLEROAD Leathercraft',
+  description: 'The philosophy, heritage, and uncompromising craftsmanship behind THE COBBLEROAD genuine leather goods.',
 }
 
 export default function OurStoryPage() {
@@ -19,7 +19,7 @@ export default function OurStoryPage() {
             Engineered for Decades, Not Seasons.
           </h1>
           <p style={{ fontSize: '1.125rem', lineHeight: 1.8, color: 'var(--colour-charcoal)', opacity: 0.85, maxWidth: '40rem', margin: '0 auto' }}>
-            Cobleroad was founded on a singular conviction: that in an era of disposable goods, a truly exceptional bag should endure, age with distinction, and become more personal with every passing year.
+            THE COBBLEROAD was founded on a singular conviction: that in an era of disposable goods, a truly exceptional bag should endure, age with distinction, and become more personal with every passing year.
           </p>
         </div>
       </section>
@@ -75,7 +75,7 @@ export default function OurStoryPage() {
           </div>
         </div>
 
-        {/* 3 Pillars of Cobleroad */}
+        {/* 3 Pillars of THE COBBLEROAD */}
         <div style={{ backgroundColor: 'var(--colour-parchment)', padding: '4rem 3rem', borderRadius: '2px', border: '1px solid var(--colour-border)', marginBottom: '6rem' }}>
           <div style={{ textAlign: 'center', maxWidth: '36rem', margin: '0 auto 3rem' }}>
             <span className="section-label" style={{ marginBottom: '0.5rem', display: 'inline-block' }}>The Standard</span>

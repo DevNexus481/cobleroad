@@ -2,17 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Menu, X, Search, ShoppingBag, User, Package } from 'lucide-react'
+import { Menu, X, Search, ShoppingBag, User, Package, ChevronDown } from 'lucide-react'
 import { useCart } from './CartProvider'
 import { QuickSearchModal } from './QuickSearchModal'
+import { NAV_TAXONOMY } from '@/lib/navigation/taxonomy'
 
-const NAV_LINKS = [
-  { href: '/shop', label: 'Shop' },
-  { href: '/our-story', label: 'Our Story' },
-  { href: '/our-story', label: 'Craft' },
-  { href: '/leather-care', label: 'Leather Care' },
-  { href: '/contact', label: 'Contact' },
-]
+export const MAIN_NAV_ITEMS = NAV_TAXONOMY
 
 const ANNOUNCEMENT_ITEMS = [
   'Complimentary Personalisation on Selected Products',
@@ -26,7 +21,16 @@ export function Navigation() {
   const [scrolled, setScrolled] = useState(false)
   const [showAnnouncement, setShowAnnouncement] = useState(false)
   const [announcementIndex, setAnnouncementIndex] = useState(0)
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
+  const [mobileExpanded, setMobileExpanded] = useState<Record<string, boolean>>({})
   const { itemCount, toggleCart, currency, setCurrency } = useCart()
+
+  function toggleMobileAccordion(label: string) {
+    setMobileExpanded((prev) => ({
+      ...prev,
+      [label]: !prev[label],
+    }))
+  }
 
   useEffect(() => {
     try {
@@ -50,7 +54,7 @@ export function Navigation() {
     setShowAnnouncement(false)
     try {
       localStorage.setItem('cobleroad-dismiss-announcement', 'true')
-    } catch {}
+    } catch { }
   }
 
   useEffect(() => {
@@ -115,18 +119,80 @@ export function Navigation() {
           </button>
 
           {/* Logo lockup */}
-          <Link href="/" className="nav-logo-wrap" aria-label="Cobleroad — home">
-            <span className="nav-wordmark">Cobleroad</span>
+          <Link href="/" className="nav-logo-wrap" aria-label="THE COBBLEROAD — home">
+            <span className="nav-wordmark">THE COBBLEROAD</span>
             <span className="nav-logo-tagline">Leather · Craft · Journey</span>
           </Link>
 
           {/* Desktop nav links */}
-          <div className="hidden lg:flex items-center gap-8" role="menubar">
-            {NAV_LINKS.map((link) => (
-              <Link key={`${link.href}-${link.label}`} href={link.href} className="nav-link" role="menuitem">
-                {link.label}
-              </Link>
-            ))}
+          <div className="hidden lg:flex items-center gap-5 xl:gap-7" role="menubar">
+            {MAIN_NAV_ITEMS.map((item) => {
+              const hasChildren = item.subItems && item.subItems.length > 0
+
+              if (hasChildren) {
+                const isOpen = activeDropdown === item.label
+                return (
+                  <div
+                    key={item.label}
+                    className="nav-dropdown-group"
+                    onMouseEnter={() => setActiveDropdown(item.label)}
+                    onMouseLeave={() => setActiveDropdown(null)}
+                    onFocus={() => setActiveDropdown(item.label)}
+                    onBlur={(e) => {
+                      if (!e.currentTarget.contains(e.relatedTarget)) {
+                        setActiveDropdown(null)
+                      }
+                    }}
+                  >
+                    <Link
+                      href={item.href}
+                      className={`nav-link ${isOpen ? 'active text-[var(--colour-espresso)]' : ''}`}
+                      role="menuitem"
+                      aria-haspopup="true"
+                      aria-expanded={isOpen}
+                    >
+                      <span>{item.label}</span>
+                      <ChevronDown
+                        size={12}
+                        strokeWidth={2}
+                        className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                      />
+                    </Link>
+
+                    <div
+                      className={`nav-dropdown-panel ${isOpen ? 'open' : ''}`}
+                      role="menu"
+                      aria-label={item.label}
+                    >
+                      <div className="nav-dropdown-inner">
+                        {item.subItems!.map((sub) => (
+                          <Link
+                            key={sub.label}
+                            href={sub.href}
+                            className="nav-dropdown-item"
+                            role="menuitem"
+                            onClick={() => setActiveDropdown(null)}
+                          >
+                            <span>{sub.label}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )
+              }
+
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className="nav-link"
+                  role="menuitem"
+                >
+                  {item.label}
+                </Link>
+              )
+            })}
           </div>
 
           {/* Actions */}
@@ -201,7 +267,7 @@ export function Navigation() {
       >
         <div className="flex items-center justify-between mb-8">
           <Link href="/" className="nav-logo-wrap" onClick={() => setDrawerOpen(false)}>
-            <span className="nav-wordmark" style={{ fontSize: '1.25rem' }}>Cobleroad</span>
+            <span className="nav-wordmark" style={{ fontSize: '1.25rem' }}>THE COBBLEROAD</span>
             <span className="nav-logo-tagline">Leather · Craft · Journey</span>
           </Link>
           <button className="nav-icon-btn" onClick={() => setDrawerOpen(false)} aria-label="Close navigation menu">
@@ -209,17 +275,138 @@ export function Navigation() {
           </button>
         </div>
 
-        <nav aria-label="Mobile navigation">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={`mobile-${link.href}-${link.label}`}
-              href={link.href}
-              className="nav-drawer-link"
-              onClick={() => setDrawerOpen(false)}
+        <nav aria-label="Mobile navigation" style={{ display: 'flex', flexDirection: 'column' }}>
+          {MAIN_NAV_ITEMS.map((item) => {
+            const hasChildren = item.subItems && item.subItems.length > 0
+            const isExpanded = !!mobileExpanded[item.label]
+
+            if (hasChildren) {
+              return (
+                <div key={item.label} style={{ display: 'flex', flexDirection: 'column' }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      borderBottom: '1px solid var(--colour-border-light)',
+                    }}
+                  >
+                    <Link
+                      href={item.href}
+                      className="nav-drawer-link"
+                      style={{ borderBottom: 'none', flex: 1, paddingRight: '0.5rem' }}
+                      onClick={() => setDrawerOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                    <button
+                      type="button"
+                      className="nav-drawer-accordion-btn"
+                      onClick={() => toggleMobileAccordion(item.label)}
+                      aria-expanded={isExpanded}
+                      aria-label={`Toggle ${item.label} sub-menu`}
+                    >
+                      <ChevronDown
+                        size={16}
+                        strokeWidth={2}
+                        style={{
+                          transition: 'transform 0.2s ease',
+                          transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+                          color: isExpanded ? 'var(--colour-cognac)' : 'inherit',
+                        }}
+                      />
+                    </button>
+                  </div>
+
+                  {isExpanded && (
+                    <div className="nav-drawer-sublist">
+                      {item.subItems!.map((sub) => (
+                        <Link
+                          key={sub.label}
+                          href={sub.href}
+                          className="nav-drawer-sublink"
+                          onClick={() => setDrawerOpen(false)}
+                        >
+                          <span className="sublink-bullet">·</span>
+                          <span>{sub.label}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )
+            }
+
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="nav-drawer-link"
+                onClick={() => setDrawerOpen(false)}
+              >
+                {item.label}
+              </Link>
+            )
+          })}
+
+          {/* Secondary Atelier Navigation Links */}
+          <div style={{ paddingTop: '1.25rem', marginTop: '0.75rem', borderTop: '1px solid var(--colour-border-light)' }}>
+            <span
+              style={{
+                fontSize: '0.625rem',
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                fontWeight: 600,
+                color: 'var(--colour-charcoal)',
+                opacity: 0.5,
+                display: 'block',
+                marginBottom: '0.5rem',
+              }}
             >
-              {link.label}
-            </Link>
-          ))}
+              The Atelier
+            </span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+              <Link
+                href="/our-story"
+                style={{
+                  fontSize: '0.8125rem',
+                  letterSpacing: '0.06em',
+                  textTransform: 'uppercase',
+                  color: 'var(--colour-charcoal)',
+                  padding: '0.375rem 0',
+                }}
+                onClick={() => setDrawerOpen(false)}
+              >
+                Our Story &amp; Craft
+              </Link>
+              <Link
+                href="/leather-care"
+                style={{
+                  fontSize: '0.8125rem',
+                  letterSpacing: '0.06em',
+                  textTransform: 'uppercase',
+                  color: 'var(--colour-charcoal)',
+                  padding: '0.375rem 0',
+                }}
+                onClick={() => setDrawerOpen(false)}
+              >
+                Leather Care
+              </Link>
+              <Link
+                href="/contact"
+                style={{
+                  fontSize: '0.8125rem',
+                  letterSpacing: '0.06em',
+                  textTransform: 'uppercase',
+                  color: 'var(--colour-charcoal)',
+                  padding: '0.375rem 0',
+                }}
+                onClick={() => setDrawerOpen(false)}
+              >
+                Contact Concierge
+              </Link>
+            </div>
+          </div>
         </nav>
 
         <div className="mt-auto pt-6 flex flex-col gap-2">

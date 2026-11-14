@@ -75,7 +75,7 @@ export default function RegisterPage() {
       <div style={{ width: '100%', maxWidth: '24rem' }}>
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <Link href="/" style={{ fontFamily: 'var(--font-serif)', fontSize: '1.5rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--colour-espresso)', textDecoration: 'none' }}>
-            Cobleroad
+            THE COBBLEROAD
           </Link>
           <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.5rem', fontWeight: 400, marginTop: '1.5rem', marginBottom: '0.375rem' }}>
             Create Account

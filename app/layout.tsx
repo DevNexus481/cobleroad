@@ -9,34 +9,34 @@ import { AdminToolbar } from '@/components/storefront/AdminToolbar'
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'),
   title: {
-    default: 'Cobleroad — Premium Genuine Leather Bags & Accessories',
-    template: '%s | Cobleroad',
+    default: 'THE COBBLEROAD — Premium Genuine Leather Bags & Accessories',
+    template: '%s | THE COBBLEROAD',
   },
   description:
-    'Cobleroad crafts premium genuine leather bags and accessories. Discover briefcases, totes, backpacks, wallets, and small leather goods built to last.',
+    'THE COBBLEROAD crafts premium genuine leather bags and accessories. Discover briefcases, totes, backpacks, wallets, and small leather goods built to last.',
   keywords: ['leather bags', 'genuine leather', 'premium bags', 'leather accessories', 'briefcase', 'leather tote', 'India'],
-  authors: [{ name: 'Cobleroad' }],
-  creator: 'Cobleroad',
+  authors: [{ name: 'THE COBBLEROAD' }],
+  creator: 'THE COBBLEROAD',
   openGraph: {
     type: 'website',
     locale: 'en_IN',
     url: '/',
-    siteName: 'Cobleroad',
-    title: 'Cobleroad — Premium Genuine Leather Bags & Accessories',
+    siteName: 'THE COBBLEROAD',
+    title: 'THE COBBLEROAD — Premium Genuine Leather Bags & Accessories',
     description:
-      'Premium genuine leather bags, briefcases, totes, and accessories. Discover the Cobleroad collection.',
+      'Premium genuine leather bags, briefcases, totes, and accessories. Discover THE COBBLEROAD collection.',
     images: [
       {
         url: '/images/hero/hero-briefcase.jpg',
         width: 1400,
         height: 788,
-        alt: 'Cobleroad — Premium Leather Bags',
+        alt: 'THE COBBLEROAD — Premium Leather Bags',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Cobleroad — Premium Leather Bags & Accessories',
+    title: 'THE COBBLEROAD — Premium Leather Bags & Accessories',
     description: 'Genuine leather bags and accessories crafted for the considered few.',
     images: ['/images/hero/hero-briefcase.jpg'],
   },

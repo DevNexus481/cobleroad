@@ -201,7 +201,7 @@ export function CartDrawer() {
                 const itemPrice = item.current_price?.amountMinor ?? item.price_snapshot?.amountMinor ?? 0
                 const itemTotal = itemPrice * (item.quantity || 1)
                 const imgUrl = item.primary_image?.url || '/images/hero/hero-briefcase.jpg'
-                const productName = item.product?.name || 'Cobleroad Leather Piece'
+                const productName = item.product?.name || 'THE COBBLEROAD Leather Piece'
                 const productSlug = item.product?.slug || ''
                 const colour = item.variant?.colour
                 const isUnavailable = item.is_available === false

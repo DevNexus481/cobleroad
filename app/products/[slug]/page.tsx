@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   const desc = product?.seo_description ?? product?.short_description ?? demo?.shortDesc ?? ''
 
   return {
-    title: product?.seo_title ?? `${name} — Cobleroad`,
+    title: product?.seo_title ?? `${name} — THE COBBLEROAD`,
     description: desc,
     openGraph: {
       title: name,
@@ -63,9 +63,23 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   const isDemo = !product
+  const isAeiou =
+    PRODUCT_BY_SLUG[slug]?.collections?.includes('aeiou') ||
+    slug === 'joint-case-tan' ||
+    slug === 'winchester-rogue-edc-holster' ||
+    slug === 'occult-sigil-leather-flask' ||
+    slug === 'devils-trap-leather-valet-tray' ||
+    slug === 'hunters-grimoire-leather-journal'
 
   return (
-    <div style={{ backgroundColor: 'var(--colour-paper)' }}>
+    <div
+      className={isAeiou ? 'theme-aeiou-gothic' : undefined}
+      style={{
+        backgroundColor: isAeiou ? '#0c0a09' : 'var(--colour-paper)',
+        minHeight: '80vh',
+        transition: 'background-color 0.3s ease',
+      }}
+    >
       {/* Demo notice */}
       {isDemo && (
         <div

@@ -3,29 +3,23 @@
 import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { ChevronDown, Check, SlidersHorizontal } from 'lucide-react'
+import type { RecommendationChip } from '@/lib/navigation/taxonomy'
 
-interface CollectionOption {
-  slug: string
-  name: string
-}
-
-interface SortOption {
+export interface SortOption {
   value: string
   label: string
 }
 
-interface ShopFilterControlsProps {
-  collections: CollectionOption[]
+export interface ShopFilterControlsProps {
+  chips: RecommendationChip[]
   sortOptions: SortOption[]
-  currentCollection: string
   currentSort: string
   currentQuery?: string
 }
 
 export function ShopFilterControls({
-  collections,
+  chips,
   sortOptions,
-  currentCollection,
   currentSort,
   currentQuery,
 }: ShopFilterControlsProps) {
@@ -33,18 +27,24 @@ export function ShopFilterControls({
   const [sortOpen, setSortOpen] = useState(false)
   const sortRef = useRef<HTMLDivElement>(null)
 
-  function updateParam(key: string, value: string) {
-    const params = new URLSearchParams()
-    if (currentQuery) params.set('q', currentQuery)
+  function navigateToChip(href: string) {
+    if (currentQuery) {
+      const separator = href.includes('?') ? '&' : '?'
+      router.push(`${href}${separator}q=${encodeURIComponent(currentQuery)}`)
+    } else {
+      router.push(href)
+    }
+  }
 
-    const nextCollection = key === 'collection' ? value : currentCollection
-    if (nextCollection) params.set('collection', nextCollection)
-
-    const nextSort = key === 'sort' ? value : currentSort
-    if (nextSort && nextSort !== 'featured') params.set('sort', nextSort)
-
-    const qs = params.toString()
-    router.push(qs ? `/shop?${qs}` : '/shop')
+  function updateSort(sortValue: string) {
+    if (typeof window === 'undefined') return
+    const url = new URL(window.location.href)
+    if (sortValue && sortValue !== 'featured') {
+      url.searchParams.set('sort', sortValue)
+    } else {
+      url.searchParams.delete('sort')
+    }
+    router.push(url.pathname + url.search)
   }
 
   // Close dropdown on click outside
@@ -63,32 +63,20 @@ export function ShopFilterControls({
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', gap: '1rem', flexWrap: 'wrap' }}>
-      {/* Minimalist Toggle Chips for Collections */}
-      <div className="filter-chip-group" role="tablist" aria-label="Filter by collection">
-        <button
-          type="button"
-          role="tab"
-          aria-selected={!currentCollection}
-          className={`filter-chip ${!currentCollection ? 'active' : ''}`}
-          onClick={() => updateParam('collection', '')}
-        >
-          All Pieces
-        </button>
-        {collections.map((c) => {
-          const isActive = currentCollection === c.slug
-          return (
-            <button
-              key={c.slug}
-              type="button"
-              role="tab"
-              aria-selected={isActive}
-              className={`filter-chip ${isActive ? 'active' : ''}`}
-              onClick={() => updateParam('collection', c.slug)}
-            >
-              {c.name}
-            </button>
-          )
-        })}
+      {/* Dynamic Context-Aware Recommendation Chips */}
+      <div className="filter-chip-group" role="tablist" aria-label="Category recommendation filters">
+        {chips.map((chip) => (
+          <button
+            key={chip.slug || 'all'}
+            type="button"
+            role="tab"
+            aria-selected={chip.isActive}
+            className={`filter-chip ${chip.isActive ? 'active' : ''}`}
+            onClick={() => navigateToChip(chip.href)}
+          >
+            {chip.label}
+          </button>
+        ))}
       </div>
 
       {/* Custom Luxury Sort Dropdown */}
@@ -141,7 +129,7 @@ export function ShopFilterControls({
                   role="option"
                   aria-selected={isSelected}
                   onClick={() => {
-                    updateParam('sort', opt.value)
+                    updateSort(opt.value)
                     setSortOpen(false)
                   }}
                   style={{

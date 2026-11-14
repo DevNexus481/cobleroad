@@ -84,11 +84,10 @@ export function ProductGridCard({
   const isOutOfStock = activeVariant ? activeVariant.stock_quantity <= 0 : false
 
   // Image dynamically updates to selected variant's genuine photograph
-  const mainImgUrl =
-    activeVariant?.image_url ||
-    primaryImage?.url ||
-    '/images/hero/hero-briefcase.jpg'
-  const hoverImgUrl = secondaryImage?.url
+  const candidateImg = activeVariant?.image_url || primaryImage?.url || ''
+  const hasImage = Boolean(candidateImg && candidateImg.trim().length > 0)
+  const mainImgUrl = candidateImg
+  const hoverImgUrl = secondaryImage?.url || ''
 
   // Quick add to cart
   function handleQuickAdd(e: React.MouseEvent) {
@@ -166,40 +165,86 @@ export function ProductGridCard({
           className="product-card__image-wrap"
           style={{ position: 'relative', overflow: 'hidden' }}
         >
-          {/* Primary variant image */}
-          <Image
-            src={mainImgUrl}
-            alt={primaryImage?.alt ?? `${name} in ${activeVariant?.colour || 'Leather'}`}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            style={{
-              objectFit: 'contain',
-              objectPosition: 'center',
-              padding: '0.5rem',
-              opacity: hoverImgUrl && isHovered ? 0 : 1,
-              transition:
-                'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
-              transform: isHovered ? 'scale(1.03)' : 'scale(1)',
-            }}
-          />
+          {hasImage && mainImgUrl ? (
+            <>
+              {/* Primary variant image */}
+              <Image
+                src={mainImgUrl}
+                alt={primaryImage?.alt ?? `${name} in ${activeVariant?.colour || 'Leather'}`}
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                style={{
+                  objectFit: 'contain',
+                  objectPosition: 'center',
+                  padding: '0.25rem',
+                  opacity: hoverImgUrl && isHovered ? 0 : 1,
+                  transition:
+                    'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
+                  transform: isHovered ? 'scale(1.03)' : 'scale(1)',
+                }}
+              />
 
-          {/* Secondary image crossfade if available */}
-          {hoverImgUrl && (
-            <Image
-              src={hoverImgUrl}
-              alt={`${name} alternate detail`}
-              fill
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              {/* Secondary image crossfade if available */}
+              {hoverImgUrl && (
+                <Image
+                  src={hoverImgUrl}
+                  alt={`${name} alternate detail`}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                  style={{
+                    objectFit: 'contain',
+                    objectPosition: 'center',
+                    padding: '0.25rem',
+                    opacity: isHovered ? 1 : 0,
+                    transition:
+                      'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
+                    transform: isHovered ? 'scale(1.03)' : 'scale(1)',
+                  }}
+                />
+              )}
+            </>
+          ) : (
+            <div
               style={{
-                objectFit: 'contain',
-                objectPosition: 'center',
-                padding: '0.5rem',
-                opacity: isHovered ? 1 : 0,
-                transition:
-                  'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
-                transform: isHovered ? 'scale(1.03)' : 'scale(1)',
+                width: '100%',
+                height: '100%',
+                minHeight: '260px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.75rem',
+                padding: '2.5rem 1rem',
+                textAlign: 'center',
+                backgroundColor: 'rgba(255, 255, 255, 0.02)',
               }}
-            />
+            >
+              <div
+                style={{
+                  width: '3.25rem',
+                  height: '3.25rem',
+                  borderRadius: '50%',
+                  border: '1px dashed var(--colour-border)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  opacity: 0.6,
+                }}
+              >
+                <Sparkles size={18} style={{ opacity: 0.75 }} />
+              </div>
+              <span
+                style={{
+                  fontSize: '0.6875rem',
+                  letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                  opacity: 0.55,
+                  fontWeight: 500,
+                }}
+              >
+                Photo Pending
+              </span>
+            </div>
           )}
 
           {/* Badges */}

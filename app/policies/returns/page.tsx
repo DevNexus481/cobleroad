@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { RotateCcw, ShieldCheck, AlertCircle, ArrowRight } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Returns & Exchanges Policy — Cobleroad',
+  title: 'Returns & Exchanges Policy — THE COBBLEROAD',
   description: '14-day trial period, complimentary reverse pickup, and lifetime craftsmanship warranty policy.',
 }
 
@@ -83,7 +83,7 @@ export default function ReturnsPolicyPage() {
               4. Lifetime Craftsmanship Warranty
             </h2>
             <p>
-              Cobleroad stands behind every stitch. We provide a lifetime warranty covering structural defects in our craftsmanship, including:
+              THE COBBLEROAD stands behind every stitch. We provide a lifetime warranty covering structural defects in our craftsmanship, including:
             </p>
             <ul style={{ paddingLeft: '1.25rem', marginBottom: '1rem' }}>
               <li>Separation or unravelling of saddle stitching</li>

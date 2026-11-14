@@ -48,10 +48,11 @@ const SHOP_LINKS = [
 ]
 
 const BRAND_LINKS = [
+  { href: '/about-us-leather-the-cobbleroad-leather-bags-accessories', label: 'About Us' },
   { href: '/our-story', label: 'Our Story' },
   { href: '/leather-care', label: 'Leather Care' },
   { href: '/personalisation', label: 'Personalisation' },
-  { href: '/contact', label: 'Contact' },
+  { href: '/contact', label: 'Contact Us' },
 ]
 
 const POLICY_LINKS = [
@@ -78,7 +79,7 @@ export function Footer() {
         >
           {/* Brand column */}
           <div style={{ gridColumn: 'span 2', minWidth: 0 }}>
-            <span className="footer__wordmark">Cobleroad</span>
+            <span className="footer__wordmark">THE COBBLEROAD</span>
             <p className="footer__tagline">
               Genuine leather bags and accessories, crafted for those who carry with intention.
             </p>
@@ -86,7 +87,7 @@ export function Footer() {
             <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
               <a
                 href="#"
-                aria-label="Cobleroad on Instagram"
+                aria-label="THE COBBLEROAD on Instagram"
                 style={{ color: 'rgba(247,244,238,0.5)', transition: 'color 0.15s ease' }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--colour-ivory)')}
                 onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(247,244,238,0.5)')}
@@ -95,7 +96,7 @@ export function Footer() {
               </a>
               <a
                 href="#"
-                aria-label="Cobleroad on Facebook"
+                aria-label="THE COBBLEROAD on Facebook"
                 style={{ color: 'rgba(247,244,238,0.5)', transition: 'color 0.15s ease' }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--colour-ivory)')}
                 onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(247,244,238,0.5)')}
@@ -104,7 +105,7 @@ export function Footer() {
               </a>
               <a
                 href="mailto:hello@cobleroad.com"
-                aria-label="Email Cobleroad"
+                aria-label="Email THE COBBLEROAD"
                 style={{ color: 'rgba(247,244,238,0.5)', transition: 'color 0.15s ease' }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--colour-ivory)')}
                 onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(247,244,238,0.5)')}
@@ -236,7 +237,7 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="footer__bottom">
           <span>
-            &copy; {year} Cobleroad. All rights reserved.
+            &copy; {year} THE COBBLEROAD. All rights reserved.
           </span>
           <span style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
             <span>India &amp; International</span>

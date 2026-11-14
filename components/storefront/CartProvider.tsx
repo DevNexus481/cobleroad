@@ -60,7 +60,7 @@ function normalizeItem(raw: any): CartItem {
     0
 
   const currency = raw.price_snapshot?.currency ?? raw.currency ?? 'INR'
-  const productName = raw.product?.name ?? raw.product_name ?? raw.name ?? 'Cobleroad Leather Piece'
+  const productName = raw.product?.name ?? raw.product_name ?? raw.name ?? 'THE COBBLEROAD Leather Piece'
   const productSlug = raw.product?.slug ?? raw.product_slug ?? raw.slug ?? ''
   const productId = raw.product?.id ?? raw.product_id ?? raw.id ?? 'prod'
   const variantId = raw.variant?.id ?? raw.variant_id ?? 'var'

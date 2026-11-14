@@ -177,7 +177,7 @@ export default function CartPage() {
                     {item.primary_image ? (
                       <Image
                         src={item.primary_image.url}
-                        alt={item.primary_image.alt ?? item.product?.name ?? 'Cobleroad Piece'}
+                        alt={item.primary_image.alt ?? item.product?.name ?? 'THE COBBLEROAD Piece'}
                         fill
                         sizes="96px"
                         style={{ objectFit: 'cover' }}
@@ -215,7 +215,7 @@ export default function CartPage() {
                             marginBottom: '0.25rem',
                           }}
                         >
-                          {item.product?.name || 'Cobleroad Leather Piece'}
+                          {item.product?.name || 'THE COBBLEROAD Leather Piece'}
                         </Link>
                       </div>
 

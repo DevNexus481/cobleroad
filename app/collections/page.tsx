@@ -6,7 +6,7 @@ import { getCollections } from '@/lib/products/queries'
 
 export const metadata: Metadata = {
   title: 'Collections — Leather Bags & Accessories',
-  description: 'Browse Cobleroad collections: Work Bags, Everyday Bags, Travel Essentials, and Small Leather Goods.',
+  description: 'Browse THE COBBLEROAD collections: Work Bags, Everyday Bags, Travel Essentials, and Small Leather Goods.',
 }
 
 const FALLBACK_COLLECTIONS = [

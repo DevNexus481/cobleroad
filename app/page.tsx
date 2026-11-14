@@ -12,9 +12,9 @@ import { getPublishedProducts } from '@/lib/products/queries'
 import { FEATURED_PRODUCTS } from '@/lib/products/catalogue'
 
 export const metadata: Metadata = {
-  title: 'Cobleroad — Premium Genuine Leather Bags & Accessories',
+  title: 'THE COBBLEROAD — Premium Genuine Leather Bags & Accessories',
   description:
-    'Discover Cobleroad — genuine leather bags, briefcases, totes, backpacks, and small leather goods for India and beyond. Built to carry a lifetime.',
+    'Discover THE COBBLEROAD — genuine leather bags, briefcases, totes, backpacks, and small leather goods for India and beyond. Built to carry a lifetime.',
 }
 
 const CATEGORY_TILES = [
@@ -79,34 +79,34 @@ export default async function HomePage() {
 
   const featuredItems = hasLive
     ? liveProducts.map((p) => ({
-        id: p.id,
-        slug: p.slug,
-        name: p.name,
-        desc: p.short_description,
-        isNew: p.is_featured,
-        isDemo: Boolean(p.is_demo),
-        personalisable: Boolean(p.personalisation?.enabled),
-        primaryImage: p.primary_image || { id: p.id, url: '/images/products/real/unfold-laptop-bag/unfold-laptop-bag-01.png', alt: p.name },
-        variants: p.variants as any,
-      }))
+      id: p.id,
+      slug: p.slug,
+      name: p.name,
+      desc: p.short_description,
+      isNew: p.is_featured,
+      isDemo: Boolean(p.is_demo),
+      personalisable: Boolean(p.personalisation?.enabled),
+      primaryImage: p.primary_image || { id: p.id, url: '/images/products/real/unfold-laptop-bag/unfold-laptop-bag-01.png', alt: p.name },
+      variants: p.variants as any,
+    }))
     : FEATURED_PRODUCTS.map((p, i) => ({
-        id: p.slug,
-        slug: p.slug,
-        name: p.name,
-        desc: p.shortDescription,
-        isNew: p.featured,
-        isDemo: false,
-        personalisable: p.personalisable,
-        primaryImage: { id: `${p.slug}-img`, url: p.primaryImage, alt: p.name },
-        variants: p.variants.map((v, vi) => ({
-          id: `${p.slug}-${v.sku}`,
-          colour: v.colour,
-          colour_hex: v.colourHex,
-          image_url: v.imageUrl,
-          stock_quantity: 10,
-          prices: [{ id: `price-${i}-${vi}`, currency: 'INR' as const, amount_minor: p.priceINR }],
-        })),
-      }))
+      id: p.slug,
+      slug: p.slug,
+      name: p.name,
+      desc: p.shortDescription,
+      isNew: p.featured,
+      isDemo: false,
+      personalisable: p.personalisable,
+      primaryImage: { id: `${p.slug}-img`, url: p.primaryImage, alt: p.name },
+      variants: p.variants.map((v, vi) => ({
+        id: `${p.slug}-${v.sku}`,
+        colour: v.colour,
+        colour_hex: v.colourHex,
+        image_url: v.imageUrl,
+        stock_quantity: 10,
+        prices: [{ id: `price-${i}-${vi}`, currency: 'INR' as const, amount_minor: p.priceINR }],
+      })),
+    }))
 
   return (
     <>
@@ -115,7 +115,7 @@ export default async function HomePage() {
         <div className="hero__bg" aria-hidden="true">
           <Image
             src="/images/products/real/weekender-duffle/weekender-duffle-15.png"
-            alt="Cobleroad genuine handcrafted leather bag"
+            alt="THE COBBLEROAD genuine handcrafted leather bag"
             fill
             priority
             quality={92}

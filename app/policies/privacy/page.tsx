@@ -3,8 +3,8 @@ import Link from 'next/link'
 import { Lock, Shield, EyeOff, FileText } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy — Cobleroad',
-  description: 'How Cobleroad collects, protects, and handles your personal information with absolute discretion.',
+  title: 'Privacy Policy — THE COBBLEROAD',
+  description: 'How THE COBBLEROAD collects, protects, and handles your personal information with absolute discretion.',
 }
 
 export default function PrivacyPolicyPage() {
@@ -51,7 +51,7 @@ export default function PrivacyPolicyPage() {
               1. Information We Collect
             </h2>
             <p style={{ marginBottom: '1rem' }}>
-              When you purchase a piece or register an account at Cobleroad, we collect only the information essential for creating and delivering your order:
+              When you purchase a piece or register an account at THE COBBLEROAD, we collect only the information essential for creating and delivering your order:
             </p>
             <ul style={{ paddingLeft: '1.25rem', marginBottom: '1rem' }}>
               <li><strong>Contact Information:</strong> Full name, email address, and mobile phone number for shipping notifications and order updates.</li>
@@ -66,7 +66,7 @@ export default function PrivacyPolicyPage() {
               2. Payment Information & Security
             </h2>
             <p>
-              All online payment processing is handled externally via <strong>Razorpay</strong>, which adheres strictly to PCI-DSS Level 1 compliance (the most rigorous industry security standard). Cobleroad does not see, transmit, or retain your raw debit/credit card numbers, expiry dates, or CVV codes. All payments are encrypted end-to-end using 256-bit SSL protocols.
+              All online payment processing is handled externally via <strong>Razorpay</strong>, which adheres strictly to PCI-DSS Level 1 compliance (the most rigorous industry security standard). THE COBBLEROAD does not see, transmit, or retain your raw debit/credit card numbers, expiry dates, or CVV codes. All payments are encrypted end-to-end using 256-bit SSL protocols.
             </p>
           </div>
 
